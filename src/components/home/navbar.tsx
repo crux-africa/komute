@@ -9,24 +9,24 @@ export default function Navbar() {
         <span className="text-primary">K</span>omute
       </Link>
       <div className="hidden items-center gap-8 md:flex">
-        <a
+        <Link
           href="#how"
           className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           How it works
-        </a>
-        <a
+        </Link>
+        <Link
           href="#routes"
           className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           Routes
-        </a>
-        <a
+        </Link>
+        <Link
           href="#drivers"
           className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           Drive
-        </a>
+        </Link>
       </div>
       <div className="flex items-center gap-3">
         <Link href="/login">

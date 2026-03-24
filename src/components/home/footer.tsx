@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="border-t border-border/50">
@@ -12,15 +14,15 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">
+            <Link href="#" className="hover:text-foreground transition-colors">
               Terms
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link href="#" className="hover:text-foreground transition-colors">
               Privacy
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link href="#" className="hover:text-foreground transition-colors">
               Support
-            </a>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-muted-foreground/60">
