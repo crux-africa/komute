@@ -9,8 +9,8 @@ export function useReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("revealed");
-            observer.unobserve(entry.target);
+            el.classList.add("revealed");
+            observer.disconnect();
           }
         });
       },
