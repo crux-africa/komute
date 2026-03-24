@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create session (sets JWT cookie)
-    const token = await createSession(user.id);
+    await createSession(user.id);
 
 
     return NextResponse.json({
@@ -74,11 +74,6 @@ export async function POST(req: NextRequest) {
         roles: user.roles,
       },
       redirectTo: user.isOnboarded ? "/rider" : "/onboarding",
-    }).cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
     });
   } catch (error) {
     console.error("Verify OTP error:", error);
