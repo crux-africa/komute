@@ -201,3 +201,32 @@
     @apply bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200;
   }
 }
+
+.revealed .reveal-item {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Route marquee */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-scroll 40s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Heading font feature */
+.font-heading {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv01";
+}
