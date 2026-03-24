@@ -4,22 +4,20 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
-  MapPin,
   Shield,
   Banknote,
   ChevronRight,
   Users,
-  Zap,
   Star,
 } from "lucide-react";
 import { RouteMarquee } from "@/components/home/route-marquee";
 import { useReveal } from "@/hooks/use-reveal";
 import Navbar from "@/components/home/navbar";
 import Header from "@/components/home/header";
+import RealitySection from "@/components/home/reality-section";
+import HowItWorks from "@/components/home/howitworks";
 
 export default function Page() {
-  const problemRef = useReveal();
-  const howRef = useReveal();
   const trustRef = useReveal();
   const ctaRef = useReveal();
 
@@ -39,134 +37,9 @@ export default function Page() {
         <RouteMarquee />
       </section>
 
-      {/* ============================================
-          THE PROBLEM — Hit the nerve
-          ============================================ */}
-      <section
-        ref={problemRef}
-        className="relative bg-foreground text-background"
-      >
-        <div className="mx-auto max-w-7xl px-5 py-24 md:py-32">
-          <div className="grid gap-16 md:grid-cols-2 md:gap-20">
-            <div>
-              <p className="reveal-item text-xs font-semibold uppercase tracking-[0.25em] text-background/40 opacity-0 translate-y-6 transition-all duration-700">
-                The reality
-              </p>
-              <h2 className="reveal-item mt-6 text-[clamp(2rem,4.5vw,3.2rem)] font-extrabold leading-[1.05] tracking-tight opacity-0 translate-y-6 transition-all delay-100 duration-700">
-                Every morning, 20 million Lagosians fight for a seat to work.
-              </h2>
-            </div>
+      <RealitySection />
 
-            <div className="flex flex-col justify-end gap-8">
-              {[
-                {
-                  stat: "4:30 AM",
-                  text: "Average wake-up time for workers in Ikorodu, Mowe, and Ajah who commute to the Island.",
-                },
-                {
-                  stat: "₦3,000+",
-                  text: "What a single Bolt ride costs from Ajah to VI. That's ₦60,000/month — half of some people's rent.",
-                },
-                {
-                  stat: "45 min",
-                  text: "Average time spent standing in a BRT queue before you even board. Every single morning.",
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className={`reveal-item flex gap-5 opacity-0 translate-y-6 transition-all duration-700`}
-                  style={{ transitionDelay: `${150 + i * 100}ms` }}
-                >
-                  <div className="shrink-0 text-2xl font-extrabold text-primary md:text-3xl">
-                    {item.stat}
-                  </div>
-                  <p className="text-sm leading-relaxed text-background/60 md:text-base">
-                    {item.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Pull quote */}
-          <div className="reveal-item mt-20 border-l-2 border-primary pl-6 opacity-0 translate-y-6 transition-all delay-500 duration-700">
-            <blockquote className="text-lg italic text-background/70 md:text-xl">
-              &ldquo;I leave my house at 5AM, stand in line for an hour, get to
-              work exhausted, and by month end half my salary is gone on
-              transport.&rdquo;
-            </blockquote>
-            <cite className="mt-3 block text-sm not-italic text-background/40">
-              — Lagos commuter, Ikorodu to Victoria Island
-            </cite>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================
-          HOW IT WORKS
-          ============================================ */}
-      <section id="how" ref={howRef} className="relative">
-        <div className="mx-auto max-w-7xl px-5 py-24 md:py-32">
-          <div className="text-center">
-            <p className="reveal-item text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground opacity-0 translate-y-6 transition-all duration-700">
-              How Komute works
-            </p>
-            <h2 className="reveal-item mt-4 text-[clamp(2rem,4.5vw,3rem)] font-extrabold tracking-tight opacity-0 translate-y-6 transition-all delay-100 duration-700">
-              Three taps. Seat booked. Morning sorted.
-            </h2>
-          </div>
-
-          <div className="mt-20 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                step: "01",
-                icon: MapPin,
-                title: "Set your route",
-                desc: "Tell us where you're coming from and where you're going. We'll show you every ride heading your way tomorrow morning.",
-                accent: "bg-primary/10 text-primary",
-              },
-              {
-                step: "02",
-                icon: Zap,
-                title: "Pick your ride",
-                desc: "Private car for ₦800. Shuttle for ₦500. Keke for ₦400. See the driver's rating, vehicle type, and exact departure time.",
-                accent: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-              },
-              {
-                step: "03",
-                icon: Banknote,
-                title: "Pay and go",
-                desc: "Pay instantly via card, transfer, or USSD. Your seat is locked. Show up at the pickup point. No queue, no stress.",
-                accent: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className={`reveal-item group relative rounded-2xl border border-border/50 bg-card p-8 opacity-0 translate-y-8 transition-all duration-700 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5`}
-                style={{ transitionDelay: `${200 + i * 150}ms` }}
-              >
-                {/* Step number — large, faded */}
-                <span className="absolute right-6 top-6 text-6xl font-black text-muted/30">
-                  {item.step}
-                </span>
-
-                <div
-                  className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${item.accent}`}
-                >
-                  <item.icon className="h-5 w-5" />
-                </div>
-
-                <h3 className="mt-6 text-xl font-bold tracking-tight">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* ============================================
           COST COMPARISON — The money shot
