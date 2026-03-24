@@ -53,14 +53,16 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    console.log('sending....')
+
     // Send via Interswitch WhatsApp API
-    const result = await sendWhatsAppOTP(phone);
+    const result = await sendWhatsAppOTP(phone, code);
 
     if (!result.success) {
-      console.error("Interswitch WhatsApp OTP failed:", result.error);
-      // Still return success to client — the OTP is stored
-      // In production, you'd fail here. For hackathon, log and continue.
-      // The OTP can be verified from the DB directly during demo.
+      console.error("Interswitch WhatsApp OTP delivery failed:", result.error);
+      // In production, you'd return an error here.
+      // For hackathon: log it, the OTP is in the DB, and we return
+      // _devOtp in dev mode so you can still test the flow.
     }
 
     // Check if user already exists

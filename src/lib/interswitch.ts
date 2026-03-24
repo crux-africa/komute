@@ -25,8 +25,8 @@ export async function getAccessToken(): Promise<string> {
     return cachedToken;
   }
 
-  const clientId = process.env.ISW_CLIENT_ID!;
-  const secretKey = process.env.ISW_SECRET_KEY!;
+  const clientId = process.env.CLIENT_ID!;
+  const secretKey = process.env.CLIENT_SECRET!;
   const credentials = Buffer.from(`${clientId}:${secretKey}`).toString(
     "base64"
   );
@@ -172,9 +172,71 @@ export async function lookupBankAccounts(
 // ============================================
 
 export async function sendWhatsAppOTP(
-  phoneNumber: string
+  phoneNumber: string,
+  code: string,
+  action: "verifying" | "validating" = "verifying"
 ): Promise<ISWIdentityResponse> {
-  return callIdentityAPI("whatsapp", { id: phoneNumber });
+  try {
+    const token = await getAccessToken();
+
+    const formattedPhone = formatPhoneForISW(phoneNumber);
+
+    const response = await fetch(
+      `${ISW_MARKETPLACE_BASE}/whatsapp/auth/send`,
+      {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phoneNumber: formattedPhone,
+          code,
+          action,
+          service: "Komute",
+          channel: "phone",
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data)
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.message || `HTTP ${response.status}`,
+        rawResponse: data,
+      };
+    }
+
+    return {
+      success: true,
+      data,
+      rawResponse: data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "WhatsApp OTP delivery failed",
+    };
+  }
+}
+
+// Format Nigerian phone to +234 international format
+function formatPhoneForISW(phone: string): string {
+  // Already in +234 format
+  if (phone.startsWith("+234")) return phone;
+  // Starts with 234 without +
+  if (phone.startsWith("234")) return `+${phone}`;
+  // Starts with 0 (local format)
+  if (phone.startsWith("0")) return `+234${phone.slice(1)}`;
+  // Assume it needs +234 prefix
+  return `+234${phone}`;
 }
 
 // ============================================
