@@ -60,9 +60,6 @@ export async function POST(req: NextRequest) {
 
     if (!result.success) {
       console.error("Interswitch WhatsApp OTP delivery failed:", result.error);
-      // In production, you'd return an error here.
-      // For hackathon: log it, the OTP is in the DB, and we return
-      // _devOtp in dev mode so you can still test the flow.
     }
 
     // Check if user already exists
