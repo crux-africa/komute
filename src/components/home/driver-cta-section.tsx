@@ -6,19 +6,20 @@ export default function DriverCTASection() {
   return (
     <section
       id="drivers"
-      className="relative overflow-hidden bg-foreground text-background"
+      className="relative overflow-hidden bg-forest text-[#FAFAF8]"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(0.58_0.16_230_/_0.15),_transparent_60%)]" />
+      {/* Amber glow accent */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(245,158,11,0.12),_transparent_60%)]" />
       <div className="relative mx-auto max-w-7xl px-5 py-24 md:py-32">
         <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-background/40">
+            <p className="font-body text-xs font-semibold uppercase tracking-[0.25em] text-[#FAFAF8]/40">
               For drivers
             </p>
-            <h2 className="mt-4 text-[clamp(2rem,4.5vw,3rem)] font-extrabold tracking-tight">
+            <h2 className="mt-4 font-heading text-[clamp(2rem,4.5vw,3rem)] font-extrabold tracking-tight">
               Turn your daily commute into daily income.
             </h2>
-            <p className="mt-4 text-background/60">
+            <p className="mt-4 font-body text-[#FAFAF8]/60">
               You&apos;re already driving to work. Your back seat is empty.
               List your route, fill your seats, and let other commuters share
               the cost of your fuel. It&apos;s not ride-hailing — it&apos;s
@@ -27,7 +28,7 @@ export default function DriverCTASection() {
             <Link href="/login" className="mt-8 inline-block">
               <Button
                 size="lg"
-                className="h-14 bg-primary px-8 text-base font-semibold text-primary-foreground hover:bg-primary/90"
+                className="h-14 bg-amber px-8 text-base font-semibold text-ink hover:bg-amber-dark"
               >
                 Start earning
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -44,12 +45,12 @@ export default function DriverCTASection() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-background/10 bg-background/5 p-5"
+                className="rounded-xl border border-[#FAFAF8]/10 bg-[#FAFAF8]/5 p-5"
               >
-                <div className="text-xl font-extrabold text-primary md:text-2xl">
+                <div className="font-heading text-xl font-extrabold text-amber md:text-2xl">
                   {item.value}
                 </div>
-                <div className="mt-1 text-xs text-background/50">
+                <div className="mt-1 font-body text-xs text-[#FAFAF8]/50">
                   {item.label}
                 </div>
               </div>
