@@ -76,9 +76,9 @@ export async function POST(req: NextRequest) {
       redirectTo: user.isOnboarded ? "/rider" : "/onboarding",
     });
   } catch (error) {
-    console.error("Verify OTP error:", error);
+    const errorMsg = error instanceof Error ? error.message : "Verification failed. Please try again.";
     return NextResponse.json(
-      { error: "Verification failed. Please try again." },
+      { error: errorMsg },
       { status: 500 }
     );
   }

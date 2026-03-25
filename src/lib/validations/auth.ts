@@ -9,6 +9,15 @@ export const phoneSchema = z.object({
     .min(11, "Phone number must be at least 11 digits")
     .max(14, "Phone number is too long")
     .regex(nigerianPhoneRegex, "Enter a valid Nigerian phone number"),
+  email: z.string().email("Enter a valid email").optional(),
+});
+
+export const sendOtpSchema = z.object({
+  phone: z
+    .string()
+    .min(11, "Phone number must be at least 11 digits")
+    .max(14, "Phone number is too long"),
+  email: z.string().email("Enter a valid email").optional(),
 });
 
 export const verifyOtpSchema = z.object({
