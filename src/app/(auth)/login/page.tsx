@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { phoneSchema, type PhoneInput } from "@/lib/validations/auth";
+import { type LoginInput, LoginSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,11 +26,11 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PhoneInput>({
-    resolver: zodResolver(phoneSchema),
+  } = useForm<LoginInput>({
+    resolver: zodResolver(LoginSchema),
   });
 
-  async function onSubmit(data: PhoneInput) {
+  async function onSubmit(data: LoginInput) {
     setIsLoading(true);
     setError(null);
 
@@ -85,6 +85,17 @@ export default function LoginPage() {
                 {errors.phone.message}
               </p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email (for verification code)</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@email.com"
+              autoComplete="email"
+              {...register("email")}
+            />
           </div>
 
           {error && (

@@ -1,15 +1,14 @@
 import { z } from "zod";
 
-// Nigerian phone number: 080, 081, 090, 091, 070, 071
 const nigerianPhoneRegex = /^(0[7-9][0-1]\d{8}|\+234[7-9][0-1]\d{8})$/;
 
-export const phoneSchema = z.object({
+export const LoginSchema = z.object({
   phone: z
     .string()
     .min(11, "Phone number must be at least 11 digits")
     .max(14, "Phone number is too long")
     .regex(nigerianPhoneRegex, "Enter a valid Nigerian phone number"),
-  email: z.string().email("Enter a valid email").optional(),
+  email: z.email("Enter a valid email").optional(),
 });
 
 export const sendOtpSchema = z.object({
@@ -17,7 +16,7 @@ export const sendOtpSchema = z.object({
     .string()
     .min(11, "Phone number must be at least 11 digits")
     .max(14, "Phone number is too long"),
-  email: z.string().email("Enter a valid email").optional(),
+  email: z.email("Enter a valid email").optional(),
 });
 
 export const verifyOtpSchema = z.object({
@@ -78,7 +77,7 @@ export const bankDetailsSchema = z.object({
     .regex(/^\d{10}$/, "Account number must be numbers only"),
 });
 
-export type PhoneInput = z.infer<typeof phoneSchema>;
+export type LoginInput = z.infer<typeof LoginSchema>;
 export type VerifyOtpInput = z.infer<typeof verifyOtpSchema>;
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
 export type NINVerificationInput = z.infer<typeof ninVerificationSchema>;
