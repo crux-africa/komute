@@ -92,8 +92,14 @@ export default function OnboardingPage() {
       const res = await fetch("/api/auth/verify-identity", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "nin", id: data.nin }),
+        body: JSON.stringify({
+          type: "nin",
+          id: data.nin,
+          firstName: profileForm.getValues("firstName"),
+          lastName: profileForm.getValues("lastName"),
+        }),
       });
+
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
 

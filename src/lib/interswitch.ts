@@ -109,8 +109,12 @@ async function callIdentityAPI(
 // IDENTITY VERIFICATION APIs
 // ============================================
 
-export async function verifyNIN(nin: string): Promise<ISWIdentityResponse> {
-  return callIdentityAPI("nin", { id: nin });
+export async function verifyNIN(
+  nin: string,
+  firstName: string,
+  lastName: string
+): Promise<ISWIdentityResponse> {
+  return callIdentityAPI("nin", { nin, firstName, lastName });
 }
 
 export async function verifyNINFullDetails(

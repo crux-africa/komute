@@ -22,7 +22,8 @@ const VERIFICATION_HANDLERS: Record<
     rawResponse?: Record<string, unknown>;
   }>
 > = {
-  nin: (id) => verifyNIN(id),
+  nin: (id, extra) =>
+    verifyNIN(id, extra?.firstName || "", extra?.lastName || ""),
   "nin-full": (id) => verifyNINFullDetails(id),
   "bvn-full": (id) => verifyBVNFullDetails(id),
   "driver-license": (id) => verifyDriversLicense(id),
