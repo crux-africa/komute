@@ -73,7 +73,9 @@ export async function POST(req: NextRequest) {
         isOnboarded: user.isOnboarded,
         roles: user.roles,
       },
-      redirectTo: user.isOnboarded ? "/rider" : "/onboarding",
+    redirectTo: user.isOnboarded
+  ? user.roles.includes("DRIVER") ? "/app/driver" : "/app/rider"
+  : "/onboarding",
     });
   } catch (error) {
     console.error("Verify OTP error:", error);
