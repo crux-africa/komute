@@ -19,7 +19,7 @@ export function RouteMarquee() {
         {[...routes, ...routes].map((route, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-primary/20 bg-primary/5 px-5 py-2.5 text-sm font-medium text-primary"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-forest/20 bg-forest/5 px-5 py-2.5 text-sm font-medium text-forest dark:border-forest-light/20 dark:bg-forest-light/10 dark:text-forest-light"
           >
             <MapPin className="h-3.5 w-3.5" />
             {route}
