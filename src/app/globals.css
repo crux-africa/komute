@@ -3,10 +3,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   GOOGLE FONTS — Plus Jakarta Sans + Inter
+   ============================================ */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -42,117 +48,129 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Brand colors as Tailwind utilities */
+  --color-forest: #1b4332;
+  --color-forest-light: #2d6a4f;
+  --color-forest-dark: #0f2b1f;
+  --color-amber: #f59e0b;
+  --color-amber-light: #fbbf24;
+  --color-amber-dark: #d97706;
+  --color-terra: #c1440e;
+  --color-terra-light: #dc6b3a;
+  --color-terra-dark: #9a360b;
+  --color-ink: #1a1a1a;
 }
 
 /* ============================================
-   WATER BLUE THEME — Light Mode
-   Brand: #0C98D4 (water blue)
+   KOMUTE BRAND — Light Mode
+   
+   Primary: Deep Forest Green (#1B4332)
+   Accent:  Warm Amber (#F59E0B)
+   Warmth:  Terracotta (#C1440E)
+   Text:    Near-Black (#1A1A1A)
+   
+   "Growth, stability, and a grounded 
+    Nigerian identity."
    ============================================ */
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(0.99 0.002 240);
-  --foreground: oklch(0.15 0.015 240);
+  --background: #fafaf8;
+  --foreground: #1a1a1a;
 
-  /* Water blue primary */
-  --primary: oklch(0.58 0.16 230);
-  --primary-foreground: oklch(0.99 0.002 240);
+  /* Deep Forest Green — foundation, trust, growth */
+  --primary: #1b4332;
+  --primary-foreground: #fafaf8;
 
-  /* Secondary — soft blue-gray */
-  --secondary: oklch(0.94 0.02 230);
-  --secondary-foreground: oklch(0.25 0.02 230);
+  /* Warm earthy secondary */
+  --secondary: #f0ece3;
+  --secondary-foreground: #1a1a1a;
 
-  --muted: oklch(0.95 0.01 240);
-  --muted-foreground: oklch(0.5 0.02 240);
+  --muted: #f0ece3;
+  --muted-foreground: #6b6b6b;
 
-  --accent: oklch(0.92 0.03 230);
-  --accent-foreground: oklch(0.2 0.02 230);
+  /* Amber accent undertone */
+  --accent: #fef3c7;
+  --accent-foreground: #92400e;
 
-  --destructive: oklch(0.55 0.22 29);
+  --destructive: #dc2626;
 
-  --border: oklch(0.9 0.01 240);
-  --input: oklch(0.88 0.015 240);
-  --ring: oklch(0.58 0.16 230);
+  --border: #e5e0d5;
+  --input: #e5e0d5;
+  --ring: #1b4332;
 
-  /* Cards & popovers */
-  --card: oklch(0.995 0.001 240);
-  --card-foreground: oklch(0.15 0.015 240);
-  --popover: oklch(0.995 0.001 240);
-  --popover-foreground: oklch(0.15 0.015 240);
+  /* Cards & popovers — warm white */
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
 
-  /* Charts — water blue palette */
-  --chart-1: oklch(0.58 0.16 230);
-  --chart-2: oklch(0.65 0.14 175);
-  --chart-3: oklch(0.55 0.12 260);
-  --chart-4: oklch(0.7 0.15 190);
-  --chart-5: oklch(0.5 0.1 250);
+  /* Charts — Komute palette */
+  --chart-1: #1b4332;
+  --chart-2: #f59e0b;
+  --chart-3: #c1440e;
+  --chart-4: #2d6a4f;
+  --chart-5: #fbbf24;
 
-  /* Sidebar */
-  --sidebar: oklch(0.97 0.01 230);
-  --sidebar-foreground: oklch(0.25 0.02 240);
-  --sidebar-primary: oklch(0.58 0.16 230);
-  --sidebar-primary-foreground: oklch(0.99 0.002 240);
-  --sidebar-accent: oklch(0.93 0.025 230);
-  --sidebar-accent-foreground: oklch(0.2 0.02 230);
-  --sidebar-border: oklch(0.9 0.01 240);
-  --sidebar-ring: oklch(0.58 0.16 230);
+  /* Sidebar — forest dark */
+  --sidebar: #1b4332;
+  --sidebar-foreground: #e8e4dc;
+  --sidebar-primary: #f59e0b;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #2d6a4f;
+  --sidebar-accent-foreground: #fafaf8;
+  --sidebar-border: #2d6a4f;
+  --sidebar-ring: #f59e0b;
 }
 
 /* ============================================
-   WATER BLUE THEME — Dark Mode
+   KOMUTE BRAND — Dark Mode
    ============================================ */
 .dark {
-  --background: oklch(0.12 0.015 240);
-  --foreground: oklch(0.93 0.005 240);
+  --background: #0f0f0d;
+  --foreground: #e8e4dc;
 
-  --primary: oklch(0.62 0.16 230);
-  --primary-foreground: oklch(0.12 0.015 240);
+  /* Forest Green — lighter for dark bg readability */
+  --primary: #2d6a4f;
+  --primary-foreground: #fafaf8;
 
-  --secondary: oklch(0.22 0.02 230);
-  --secondary-foreground: oklch(0.9 0.005 240);
+  --secondary: #1f1f1b;
+  --secondary-foreground: #e8e4dc;
 
-  --muted: oklch(0.2 0.015 240);
-  --muted-foreground: oklch(0.6 0.01 240);
+  --muted: #1f1f1b;
+  --muted-foreground: #8a8a7a;
 
-  --accent: oklch(0.22 0.03 230);
-  --accent-foreground: oklch(0.93 0.005 240);
+  /* Amber accent in dark */
+  --accent: #422006;
+  --accent-foreground: #fbbf24;
 
-  --destructive: oklch(0.55 0.22 29);
+  --destructive: #ef4444;
 
-  --border: oklch(0.25 0.015 240);
-  --input: oklch(0.22 0.015 240);
-  --ring: oklch(0.62 0.16 230);
+  --border: #2a2a25;
+  --input: #2a2a25;
+  --ring: #2d6a4f;
 
-  --card: oklch(0.15 0.015 240);
-  --card-foreground: oklch(0.93 0.005 240);
-  --popover: oklch(0.15 0.015 240);
-  --popover-foreground: oklch(0.93 0.005 240);
+  --card: #171714;
+  --card-foreground: #e8e4dc;
+  --popover: #171714;
+  --popover-foreground: #e8e4dc;
 
-  --chart-1: oklch(0.62 0.16 230);
-  --chart-2: oklch(0.68 0.14 175);
-  --chart-3: oklch(0.6 0.12 260);
-  --chart-4: oklch(0.72 0.15 190);
-  --chart-5: oklch(0.55 0.1 250);
+  --chart-1: #2d6a4f;
+  --chart-2: #fbbf24;
+  --chart-3: #dc6b3a;
+  --chart-4: #40916c;
+  --chart-5: #f59e0b;
 
-  --sidebar: oklch(0.14 0.015 240);
-  --sidebar-foreground: oklch(0.9 0.005 240);
-  --sidebar-primary: oklch(0.62 0.16 230);
-  --sidebar-primary-foreground: oklch(0.12 0.015 240);
-  --sidebar-accent: oklch(0.2 0.025 230);
-  --sidebar-accent-foreground: oklch(0.9 0.005 240);
-  --sidebar-border: oklch(0.25 0.015 240);
-  --sidebar-ring: oklch(0.62 0.16 230);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html,
-  body {
-    scroll-behavior: auto;
-  }
+  /* Sidebar — deeper dark */
+  --sidebar: #0a1f15;
+  --sidebar-foreground: #e8e4dc;
+  --sidebar-primary: #f59e0b;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #1b4332;
+  --sidebar-accent-foreground: #e8e4dc;
+  --sidebar-border: #1b4332;
+  --sidebar-ring: #f59e0b;
 }
 
 /* ============================================
@@ -165,54 +183,120 @@ html {
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* ============================================
-   CUSTOM UTILITIES
+   BRAND UTILITIES
    ============================================ */
 @layer utilities {
-  /* Water blue gradient for hero sections */
-  .bg-water-gradient {
-    background: linear-gradient(
-      135deg,
-      oklch(0.58 0.16 230) 0%,
-      oklch(0.52 0.14 210) 50%,
-      oklch(0.48 0.12 245) 100%
-    );
+  /* Heading font class */
+  .font-heading {
+    font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   }
 
-  .dark .bg-water-gradient {
-    background: linear-gradient(
-      135deg,
-      oklch(0.3 0.1 230) 0%,
-      oklch(0.25 0.08 210) 50%,
-      oklch(0.2 0.06 245) 100%
-    );
+  /* Body font class */
+  .font-body {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   }
 
-  /* Verified badge glow */
+  /* Brand gradient — forest to dark forest */
+  .bg-brand-gradient {
+    background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 50%, #1b4332 100%);
+  }
+
+  /* Amber energy gradient — for CTAs and highlights */
+  .bg-amber-gradient {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+  }
+
+  /* Terracotta warmth gradient */
+  .bg-terra-gradient {
+    background: linear-gradient(135deg, #c1440e 0%, #dc6b3a 50%, #c1440e 100%);
+  }
+
+  .dark .bg-brand-gradient {
+    background: linear-gradient(135deg, #0a1f15 0%, #1b4332 50%, #0a1f15 100%);
+  }
+
+  /* Verified badge glow — forest green */
   .verified-glow {
-    box-shadow: 0 0 0 3px oklch(0.58 0.16 230 / 0.15);
+    box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.15);
+  }
+
+  .dark .verified-glow {
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.2);
   }
 
   /* Vehicle type badges */
   .badge-car {
-    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
+    background-color: rgba(27, 67, 50, 0.1);
+    color: #1b4332;
   }
+  .dark .badge-car {
+    background-color: rgba(45, 106, 79, 0.2);
+    color: #40916c;
+  }
+
   .badge-shuttle {
-    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #92400e;
   }
+  .dark .badge-shuttle {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+  }
+
   .badge-keke {
-    @apply bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200;
+    background-color: rgba(193, 68, 14, 0.1);
+    color: #c1440e;
+  }
+  .dark .badge-keke {
+    background-color: rgba(193, 68, 14, 0.15);
+    color: #dc6b3a;
+  }
+
+  /* Amber text for emphasis */
+  .text-amber-brand {
+    color: #f59e0b;
+  }
+  .dark .text-amber-brand {
+    color: #fbbf24;
+  }
+
+  /* Terracotta text for warmth */
+  .text-terra-brand {
+    color: #c1440e;
+  }
+  .dark .text-terra-brand {
+    color: #dc6b3a;
   }
 }
 
+/* ============================================
+   LANDING PAGE ANIMATIONS
+   ============================================ */
+
+/* Reveal on scroll */
 .revealed .reveal-item {
   opacity: 1 !important;
   transform: translateY(0) !important;
@@ -234,10 +318,4 @@ html {
 
 .marquee-track:hover {
   animation-play-state: paused;
-}
-
-/* Heading font feature */
-.font-heading {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-feature-settings: "ss01", "ss02", "cv01";
 }

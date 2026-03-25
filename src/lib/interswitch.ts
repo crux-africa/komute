@@ -1,7 +1,5 @@
-// ============================================
 // Interswitch API Integration
 // Token management + Identity verification
-// ============================================
 
 const ISW_MARKETPLACE_BASE =
   "https://api-marketplace-routing.k8.isw.la/marketplace-routing/api/v1";
@@ -12,9 +10,7 @@ const ISW_PASSPORT_URL =
 const ISW_PAYMENT_SANDBOX = "https://qa.interswitchng.com";
 // LIVE payment: "https://webpay.interswitchng.com"
 
-// ============================================
 // TOKEN MANAGEMENT
-// ============================================
 
 let cachedToken: string | null = null;
 let tokenExpiry: number = 0;
@@ -229,13 +225,12 @@ export async function sendWhatsAppOTP(
 
 // Format Nigerian phone to +234 international format
 function formatPhoneForISW(phone: string): string {
-  // Already in +234 format
   if (phone.startsWith("+234")) return phone;
-  // Starts with 234 without +
+
   if (phone.startsWith("234")) return `+${phone}`;
-  // Starts with 0 (local format)
+
   if (phone.startsWith("0")) return `+234${phone.slice(1)}`;
-  // Assume it needs +234 prefix
+
   return `+234${phone}`;
 }
 
