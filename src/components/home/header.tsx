@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <header
       ref={heroRef}
-      className="relative min-h-[100svh] pt-16"
+      className="relative min-h-[100svh] py-16 bg-forest"
     >
       {/* Grain overlay */}
       <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9IjAuMDUiLz48L3N2Zz4=')] opacity-50" />
@@ -21,19 +21,20 @@ export default function Header() {
       <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl flex-col justify-center px-5 py-20">
         <div className="max-w-4xl">
           {/* Eyebrow */}
-          <div className="reveal-item translate-y-8 opacity-0 transition-all duration-700">
-            <span className="inline-flex items-center gap-2 rounded-full border border-forest/20 bg-forest/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-forest dark:border-forest-light/20 dark:bg-forest-light/10 dark:text-forest-light">
+          <div className="reveal-item translate-y-8 transition-all duration-700">
+            <span className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-forest/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary dark:border-forest-light/20 dark:bg-forest-light/10 dark:text-forest-light">
               <span className="h-1.5 w-1.5 rounded-full bg-amber animate-pulse" />
               Now live in Lagos
             </span>
           </div>
 
+          {/* make this text slide vertically */}
           {/* Headline — Plus Jakarta Sans */}
           <h1 className="reveal-item mt-8 translate-y-8 opacity-0 transition-all delay-100 duration-700">
-            <span className="block font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.92] tracking-tight">
+            <span className="text-secondary block font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.92] tracking-tight">
               Book your seat
             </span>
-            <span className="block font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.92] tracking-tight">
+            <span className="text-secondary block font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.92] tracking-tight">
               tonight.
             </span>
             <span className="mt-2 block font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.92] tracking-tight text-amber-brand">
@@ -45,7 +46,7 @@ export default function Header() {
           </h1>
 
           {/* Sub — Inter */}
-          <p className="reveal-item mt-8 max-w-xl translate-y-8 font-body text-lg leading-relaxed text-muted-foreground opacity-0 transition-all delay-200 duration-700 md:text-xl">
+          <p className="reveal-item mt-8 max-w-xl translate-y-8 font-body text-lg leading-relaxed text-secondary opacity-0 transition-all delay-200 duration-700 md:text-xl">
             Stop waking up at 4:30AM to stand in BRT queues. Pre-book a seat
             in a car, shuttle, or keke heading your way — at prices that
             won&apos;t wreck your salary.
@@ -71,12 +72,12 @@ export default function Header() {
           </div>
 
           {/* Quick stats */}
-          <div className="reveal-item mt-14 flex gap-10 opacity-0 translate-y-8 transition-all delay-[400ms] duration-700">
+          <div className="reveal-item mt-14 flex gap-10 opacity-0 translate-y-8 transition-all delay-[400ms] duration-700 text-secondary">
             <div>
               <div className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
                 50–70%
               </div>
-              <div className="mt-0.5 font-body text-sm text-muted-foreground">
+              <div className="mt-0.5 font-body text-sm">
                 cheaper than Bolt
               </div>
             </div>
@@ -85,7 +86,7 @@ export default function Header() {
               <div className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
                 0
               </div>
-              <div className="mt-0.5 font-body text-sm text-muted-foreground">
+              <div className="mt-0.5 font-body text-sm">
                 minutes in a queue
               </div>
             </div>
@@ -94,7 +95,7 @@ export default function Header() {
               <div className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
                 5:45AM
               </div>
-              <div className="mt-0.5 font-body text-sm text-muted-foreground">
+              <div className="mt-0.5 font-body text-sm">
                 earliest rides available
               </div>
             </div>
@@ -102,11 +103,11 @@ export default function Header() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/50">
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-secondary">
           <span className="font-body text-[10px] uppercase tracking-[0.2em]">
             Scroll
           </span>
-          <div className="h-8 w-px bg-gradient-to-b from-muted-foreground/50 to-transparent" />
+          <div className="h-8 w-px bg-gradient-to-b from-secondary to-transparent" />
         </div>
       </div>
     </header>

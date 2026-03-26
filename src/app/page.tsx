@@ -18,11 +18,11 @@ export default function Page() {
       <Header />
 
       <section id="routes" className="border-y border-border/50 bg-secondary/30">
-        <div className="mx-auto max-w-7xl px-5 py-3">
+        {/* <div className="mx-auto max-w-7xl px-5 py-3">
           <p className="mb-2 text-center font-body text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
             Popular corridors
           </p>
-        </div>
+        </div> */}
         <RouteMarquee />
       </section>
 

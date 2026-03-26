@@ -64,8 +64,7 @@ export async function POST(req: NextRequest) {
 
     let deliveryChannel = "whatsapp";
 
-    if (!iswResult.success) {
-      console.log("ISW WhatsApp unavailable, falling back to email");
+    if (iswResult.success) {
       deliveryChannel = "email";
 
       if (email) {
@@ -77,6 +76,20 @@ export async function POST(req: NextRequest) {
       } else {
         deliveryChannel = "none";
       }
+
+      // if (!iswResult.success) {
+      //   console.log("ISW WhatsApp unavailable, falling back to email");
+      //   deliveryChannel = "email";
+
+      //   // if (email) {
+      //   //   const emailResult = await sendOTPviaEmail(email, code);
+      //   //   if (!emailResult.success) {
+      //   //     console.error("Email fallback also failed:", emailResult.error);
+      //   //     deliveryChannel = "none";
+      //   //   }
+      //   } else {
+      //     deliveryChannel = "none";
+      //   }
     }
 
     // Check if user already exists
