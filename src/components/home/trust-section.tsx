@@ -16,9 +16,10 @@ export default function TrustSection() {
               Every person on Komute is verified.
             </h2>
             <p className="reveal-item mt-4 font-body text-muted-foreground opacity-0 translate-y-6 transition-all delay-200 duration-700">
-              No anonymous riders. No unverified drivers. Every account
-              is backed by government-issued identity, verified in real
-              time through Interswitch&apos;s KYC infrastructure.
+              75% of surveyed commuters said they need a verified platform before
+              they&apos;d share a ride with anyone. No anonymous riders. No
+              unverified drivers. Every account is backed by government-issued
+              identity, verified in real time through Interswitch.
             </p>
           </div>
 

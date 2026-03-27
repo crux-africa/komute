@@ -25,18 +25,18 @@ export default function RealitySection() {
           <div className="flex flex-col justify-end gap-8">
             {[
               {
-                stat: "4:30 AM",
-                text: "Average wake-up time for workers in Ikorodu, Mowe, and Ajah who commute to the Island.",
+                stat: "70%",
+                text: "of Lagos commuters spend ₦1,000–₦2,500 daily on transport. That's ₦20,000–₦50,000 a month — over 20% of their income.",
                 color: "text-amber",
               },
               {
-                stat: "₦3,000+",
-                text: "What a single Bolt ride costs from Ajah to VI. That's ₦60,000/month — half of some people's rent.",
+                stat: "65%",
+                text: "cite unpredictable arrival time as their single biggest commute frustration. Not cost. Not distance. Uncertainty.",
                 color: "text-terra-light",
               },
               {
-                stat: "45 min",
-                text: "Average time spent standing in a BRT queue before you even board. Every single morning.",
+                stat: "85%",
+                text: "of surveyed commuters said they would switch to Komute immediately if it existed. From 20 responses in 24 hours.",
                 color: "text-amber-light",
               },
             ].map((item, i) => (
@@ -59,12 +59,11 @@ export default function RealitySection() {
         {/* Pull quote — terracotta border accent */}
         <div className="reveal-item mt-20 border-l-2 border-terra pl-6 opacity-0 translate-y-6 transition-all delay-500 duration-700">
           <blockquote className="font-body text-lg italic text-[#FAFAF8]/70 md:text-xl">
-            &ldquo;I leave my house at 5AM, stand in line for an hour, get to
-            work exhausted, and by month end half my salary is gone on
-            transport.&rdquo;
+            &ldquo;A comfortable transportation network from my neighbourhood to
+            office district. Stress-free and predictable.&rdquo;
           </blockquote>
           <cite className="mt-3 block font-body text-sm not-italic text-[#FAFAF8]/40">
-            — Lagos commuter, Ikorodu to Victoria Island
+            — Survey respondent, Mainland Lagos
           </cite>
         </div>
       </div>
