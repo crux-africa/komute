@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2, MapPin } from "lucide-react";
+import { LAGOS_CORRIDORS, formatNaira } from "@/lib/utils";
 import z from "zod";
 
 export default function CreateRidePage() {
@@ -22,11 +23,25 @@ export default function CreateRidePage() {
 
   type CreateRideFormValues = z.input<typeof createRideSchema>;
 
-  const { register, handleSubmit, setValue, formState: { errors } } =
+  const { register, handleSubmit, setValue, watch, formState: { errors } } =
     useForm<CreateRideFormValues, unknown, CreateRideInput>({
       resolver: zodResolver(createRideSchema),
-      defaultValues: { totalSeats: 3, isRecurring: false, pricePerSeat: 50000 },
+      defaultValues: { totalSeats: 3, isRecurring: false, pricePerSeat: 20000 },
     });
+
+  const selectedPrice = watch("pricePerSeat");
+
+  function selectCorridor(corridor: typeof LAGOS_CORRIDORS[number]) {
+    setValue("originLat", corridor.from.lat);
+    setValue("originLng", corridor.from.lng);
+    setValue("originAddress", corridor.name.split(" → ")[0]);
+    setValue("originArea", corridor.name.split(" → ")[0]);
+    setValue("destLat", corridor.to.lat);
+    setValue("destLng", corridor.to.lng);
+    setValue("destAddress", corridor.name.split(" → ")[1]);
+    setValue("destArea", corridor.name.split(" → ")[1]);
+    setValue("pricePerSeat", corridor.pricePerSeat);
+  }
 
   async function onSubmit(data: CreateRideInput) {
     setIsLoading(true);
@@ -66,6 +81,27 @@ export default function CreateRidePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      {/* Quick route selector */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <MapPin className="h-4 w-4 text-muted-foreground" />
+          <p className="font-body text-xs font-semibold text-muted-foreground">Popular Routes</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {LAGOS_CORRIDORS.map((corridor) => (
+            <button
+              key={corridor.name}
+              onClick={() => selectCorridor(corridor)}
+              className="flex flex-col items-start p-3 rounded-lg border border-border bg-card hover:border-forest/50 hover:bg-forest/5 transition-all text-left"
+            >
+              <span className="font-body text-xs font-medium text-foreground truncate w-full">{corridor.name}</span>
+              <span className="font-heading text-sm font-bold text-forest mt-1">{formatNaira(corridor.pricePerSeat)}</span>
+              <span className="font-body text-[10px] text-muted-foreground">{corridor.estimatedDistance}km</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="font-heading text-xl">Offer a ride</CardTitle>
@@ -118,9 +154,17 @@ export default function CreateRidePage() {
                 <Input type="number" min={1} max={14} placeholder="3" {...register("totalSeats")} />
               </div>
               <div className="space-y-2">
-                <Label className="font-body">Price per seat (₦)</Label>
-                <Input type="number" min={100} {...register("pricePerSeat", { valueAsNumber: true })} />
-                <p className="text-[10px] text-muted-foreground">Auto-filled from route. Adjust if needed.</p>
+                <Label className="font-body">Price per seat</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-body">₦</span>
+                  <Input 
+                    type="number" 
+                    min={100} 
+                    className="pl-7 font-heading font-semibold"
+                    {...register("pricePerSeat", { valueAsNumber: true })} 
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground">Affordable prices help fill your seats</p>
               </div>
             </div>
 

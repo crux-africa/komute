@@ -111,42 +111,42 @@ export const LAGOS_CORRIDORS = [
     name: "Ikorodu → Island",
     from: { lat: 6.6194, lng: 3.5105 },
     to: { lat: 6.4281, lng: 3.4219 },
-    pricePerSeat: 80000, // ₦800
+    pricePerSeat: 30000, // ₦300 (was ₦800)
     estimatedDistance: 18, // km
   },
   {
     name: "Ajah → Victoria Island",
     from: { lat: 6.4698, lng: 3.5852 },
     to: { lat: 6.4281, lng: 3.4219 },
-    pricePerSeat: 50000, // ₦500
+    pricePerSeat: 20000, // ₦200 (was ₦500)
     estimatedDistance: 8,
   },
   {
     name: "Berger → Ikeja",
     from: { lat: 6.6018, lng: 3.3515 },
     to: { lat: 6.5955, lng: 3.3421 },
-    pricePerSeat: 30000, // ₦300
+    pricePerSeat: 15000, // ₦150 (was ₦300)
     estimatedDistance: 5,
   },
   {
     name: "Mowe/Ibafo → Ikeja",
     from: { lat: 6.81, lng: 3.44 },
     to: { lat: 6.5955, lng: 3.3421 },
-    pricePerSeat: 100000, // ₦1000
+    pricePerSeat: 40000, // ₦400 (was ₦1000)
     estimatedDistance: 25,
   },
   {
     name: "Ojo → Apapa",
     from: { lat: 6.4579, lng: 3.1818 },
     to: { lat: 6.4488, lng: 3.3597 },
-    pricePerSeat: 40000, // ₦400
+    pricePerSeat: 15000, // ₦150 (was ₦400)
     estimatedDistance: 7,
   },
   {
     name: "Lekki → Ikeja",
     from: { lat: 6.4478, lng: 3.4723 },
     to: { lat: 6.5955, lng: 3.3421 },
-    pricePerSeat: 60000, // ₦600
+    pricePerSeat: 25000, // ₦250 (was ₦600)
     estimatedDistance: 12,
   },
 ] as const;
