@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -37,13 +38,13 @@ export default function RootLayout({
         "font-sans",
         inter.variable,
       )}>
+      <head>
+        <Script src="https://newwebpay.qa.interswitchng.com/inline-checkout.js" async></Script>
+        <Script src="https://js.paystack.co/v1/inline.js" async ></Script>
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
-
-        <Script
-          src="https://newwebpay.qa.interswitchng.com/inline-checkout.js"
-          strategy="afterInteractive"
-        />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

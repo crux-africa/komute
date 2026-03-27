@@ -73,9 +73,9 @@ export async function POST(req: NextRequest) {
         isOnboarded: user.isOnboarded,
         roles: user.roles,
       },
-    redirectTo: user.isOnboarded
-  ? user.roles.includes("DRIVER") ? "/app/driver" : "/app/rider"
-  : "/onboarding",
+      redirectTo: user.isOnboarded
+        ? user.roles.includes("DRIVER") ? "/driver" : "/rider"
+        : "/onboarding",
     });
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : "Verification failed. Please try again.";

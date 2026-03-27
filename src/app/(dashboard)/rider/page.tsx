@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RideCard } from "@/components/rides/ride-card";
 import { Search, MapPin, ArrowRight } from "lucide-react";
 import { LAGOS_CORRIDORS } from "@/lib/utils";
+import { toast } from "sonner";
 
 type Ride = ComponentProps<typeof RideCard>["ride"];
 
@@ -40,7 +41,29 @@ export default function RiderDashboard() {
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    router.push(`/rider/search?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+
+    const trimmedFrom = from.trim();
+    const trimmedTo = to.trim();
+
+    if (!trimmedFrom && !trimmedTo) {
+      return toast.error("Missing trip details", {
+        description: "Please enter both your pickup location and destination to search for rides.",
+      });
+    }
+
+    if (!trimmedFrom) {
+      return toast.error("Pickup location required", {
+        description: "Please enter where you're departing from to search for available rides.",
+      });
+    }
+
+    if (!trimmedTo) {
+      return toast.error("Destination required", {
+        description: "Please enter where you're heading to search for available rides.",
+      });
+    }
+
+    router.push(`/rider/search?from=${encodeURIComponent(trimmedFrom)}&to=${encodeURIComponent(trimmedTo)}`);
   }
 
   return (
@@ -104,7 +127,7 @@ export default function RiderDashboard() {
             ))}
           </div>
         ) : rides.length > 0 ? (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-4">
             {rides.slice(0, 5).map((ride) => (
               <RideCard key={ride.id} ride={ride} />
             ))}

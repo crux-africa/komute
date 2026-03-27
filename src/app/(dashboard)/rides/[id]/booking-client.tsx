@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { InterswitchPayButton } from "@/components/payments/interswitch-pay-button";
+import { PaymentMethodSelector } from "@/components/payments/payment-method-selector";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { formatNaira } from "@/lib/utils";
 
@@ -23,16 +23,18 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
   const [seats, setSeats] = useState(1);
   const [step, setStep] = useState<"select" | "pay" | "confirming" | "done" | "error">(alreadyBooked ? "done" : "select");
   const [error, setError] = useState("");
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   const totalPrice = pricePerSeat * seats;
 
-  async function handlePaymentSuccess(txnRef: string) {
+  async function handlePaymentSuccess(txnRef: string, provider: "interswitch" | "paystack") {
+    setShowPaymentDialog(false);
     setStep("confirming");
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rideId, seats, txnRef }),
+        body: JSON.stringify({ rideId, seats, txnRef, provider }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || result.detail);
@@ -41,6 +43,12 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
       setError(err instanceof Error ? err.message : "Booking failed after payment. Contact support.");
       setStep("error");
     }
+  }
+
+  function handlePaymentFailure(err: string) {
+    setError(err);
+    setShowPaymentDialog(false);
+    setStep("error");
   }
 
   if (step === "done" || alreadyBooked) {
@@ -102,15 +110,26 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
         {step === "pay" && (
           <>
             <p className="font-body text-sm text-muted-foreground">Complete payment to lock your seat(s).</p>
-            <InterswitchPayButton
+            <Button 
+              onClick={() => setShowPaymentDialog(true)} 
+              className="w-full h-12 bg-amber hover:bg-amber-dark text-ink font-semibold text-base"
+              size="lg"
+            >
+              Choose Payment Method
+            </Button>
+            <Button variant="ghost" onClick={() => setStep("select")} className="w-full font-body text-sm">Go back</Button>
+            
+            <PaymentMethodSelector
+              open={showPaymentDialog}
+              onOpenChange={setShowPaymentDialog}
               amount={totalPrice}
               rideId={rideId}
+              seats={seats}
               customerEmail={userEmail || undefined}
               customerName={userName || undefined}
               onSuccess={handlePaymentSuccess}
-              onFailure={(err) => { setError(err); setStep("error"); }}
+              onFailure={handlePaymentFailure}
             />
-            <Button variant="ghost" onClick={() => setStep("select")} className="w-full font-body text-sm">Go back</Button>
           </>
         )}
 

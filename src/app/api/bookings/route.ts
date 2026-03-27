@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { verifyTransaction } from "@/lib/interswitch";
+import { verifyPaystackTransaction } from "@/lib/paystack";
 import { bookRideSchema } from "@/lib/validations/ride";
 
-// POST /api/bookings — book a seat (with Interswitch payment verification)
+// POST /api/bookings — book a seat (with payment verification)
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser();
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validation.error.issues[0].message }, { status: 400 });
     }
 
-    const { rideId, seats, txnRef } = validation.data;
+    const { rideId, seats, txnRef, provider = "paystack" } = validation.data;
 
     // Get ride
     const ride = await prisma.ride.findUnique({ where: { id: rideId } });
@@ -35,76 +36,164 @@ export async function POST(req: NextRequest) {
 
     const totalPrice = ride.pricePerSeat * seats;
 
-    // Verify payment with Interswitch
-    const verification = await verifyTransaction(txnRef, totalPrice);
-    if (!verification.success) {
-      // Create failed payment record
+    // Verify payment based on provider
+    console.log(`[Booking] Verifying ${provider} transaction:`, { txnRef, totalPrice });
+    
+    if (provider === "paystack") {
+      const verification = await verifyPaystackTransaction(txnRef, totalPrice);
+      console.log("[Booking] Paystack verification result:", verification);
+      
+      if (!verification.success) {
+        console.error("[Booking] Payment verification failed:", verification.error);
+        await prisma.payment.create({
+          data: {
+            bookingId: existing?.id || "pending",
+            userId: user.id,
+            amount: totalPrice,
+            transactionRef: txnRef,
+            responseCode: verification.data?.status,
+            responseDescription: verification.error,
+            status: "FAILED",
+          },
+        });
+        return NextResponse.json({ 
+          error: "Payment verification failed", 
+          detail: verification.error || "We couldn't verify your payment. Please try again or contact support.",
+          code: verification.data?.status 
+        }, { status: 402 });
+      }
+
+      // Payment verified — create booking + payment + decrement seats
+      const [booking] = await prisma.$transaction([
+        prisma.booking.upsert({
+          where: { rideId_riderId: { rideId, riderId: user.id } },
+          create: {
+            rideId,
+            riderId: user.id,
+            seats,
+            totalPrice,
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
+          },
+          update: {
+            seats,
+            totalPrice,
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
+            cancelledAt: null,
+            cancelReason: null,
+          },
+        }),
+        prisma.ride.update({
+          where: { id: rideId },
+          data: { availableSeats: { decrement: seats } },
+        }),
+      ]);
+
+      // Create payment record
       await prisma.payment.create({
         data: {
-          bookingId: existing?.id || "pending",
+          bookingId: booking.id,
           userId: user.id,
           amount: totalPrice,
           transactionRef: txnRef,
-          responseCode: verification.data?.ResponseCode,
-          responseDescription: verification.error,
-          status: "FAILED",
+          paymentRef: verification.data?.reference,
+          responseCode: verification.data?.status,
+          responseDescription: verification.data?.gateway_response,
+          status: "VERIFIED",
+          verifiedAt: new Date(),
         },
       });
-      return NextResponse.json({ error: "Payment verification failed", detail: verification.error }, { status: 402 });
+
+      return NextResponse.json({
+        booking: {
+          id: booking.id,
+          rideId: booking.rideId,
+          seats: booking.seats,
+          totalPrice: booking.totalPrice,
+          status: booking.status,
+        },
+        message: "Booking confirmed!",
+      }, { status: 201 });
+      
+    } else {
+      // Interswitch verification
+      const verification = await verifyTransaction(txnRef, totalPrice);
+      console.log("[Booking] Interswitch verification result:", verification);
+      
+      if (!verification.success) {
+        console.error("[Booking] Payment verification failed:", verification.error);
+        await prisma.payment.create({
+          data: {
+            bookingId: existing?.id || "pending",
+            userId: user.id,
+            amount: totalPrice,
+            transactionRef: txnRef,
+            responseCode: verification.data?.ResponseCode,
+            responseDescription: verification.error,
+            status: "FAILED",
+          },
+        });
+        return NextResponse.json({ 
+          error: "Payment verification failed", 
+          detail: verification.error || "We couldn't verify your payment. Please try again or contact support.",
+          code: verification.data?.ResponseCode 
+        }, { status: 402 });
+      }
+
+      // Payment verified — create booking + payment + decrement seats
+      const [booking] = await prisma.$transaction([
+        prisma.booking.upsert({
+          where: { rideId_riderId: { rideId, riderId: user.id } },
+          create: {
+            rideId,
+            riderId: user.id,
+            seats,
+            totalPrice,
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
+          },
+          update: {
+            seats,
+            totalPrice,
+            status: "CONFIRMED",
+            confirmedAt: new Date(),
+            cancelledAt: null,
+            cancelReason: null,
+          },
+        }),
+        prisma.ride.update({
+          where: { id: rideId },
+          data: { availableSeats: { decrement: seats } },
+        }),
+      ]);
+
+      // Create payment record
+      await prisma.payment.create({
+        data: {
+          bookingId: booking.id,
+          userId: user.id,
+          amount: totalPrice,
+          transactionRef: txnRef,
+          paymentRef: verification.data?.PaymentReference,
+          responseCode: verification.data?.ResponseCode,
+          responseDescription: verification.data?.ResponseDescription,
+          status: "VERIFIED",
+          verifiedAt: new Date(),
+        },
+      });
+
+      return NextResponse.json({
+        booking: {
+          id: booking.id,
+          rideId: booking.rideId,
+          seats: booking.seats,
+          totalPrice: booking.totalPrice,
+          status: booking.status,
+        },
+        message: "Booking confirmed!",
+      }, { status: 201 });
     }
-
-    // Payment verified — create booking + payment + decrement seats in transaction
-    const [booking] = await prisma.$transaction([
-      prisma.booking.upsert({
-        where: { rideId_riderId: { rideId, riderId: user.id } },
-        create: {
-          rideId,
-          riderId: user.id,
-          seats,
-          totalPrice,
-          status: "CONFIRMED",
-          confirmedAt: new Date(),
-        },
-        update: {
-          seats,
-          totalPrice,
-          status: "CONFIRMED",
-          confirmedAt: new Date(),
-          cancelledAt: null,
-          cancelReason: null,
-        },
-      }),
-      prisma.ride.update({
-        where: { id: rideId },
-        data: { availableSeats: { decrement: seats } },
-      }),
-    ]);
-
-    // Create payment record
-    await prisma.payment.create({
-      data: {
-        bookingId: booking.id,
-        userId: user.id,
-        amount: totalPrice,
-        transactionRef: txnRef,
-        paymentRef: verification.data?.PaymentReference,
-        responseCode: verification.data?.ResponseCode,
-        responseDescription: verification.data?.ResponseDescription,
-        status: "VERIFIED",
-        verifiedAt: new Date(),
-      },
-    });
-
-    return NextResponse.json({
-      booking: {
-        id: booking.id,
-        rideId: booking.rideId,
-        seats: booking.seats,
-        totalPrice: booking.totalPrice,
-        status: booking.status,
-      },
-      message: "Booking confirmed!",
-    }, { status: 201 });
   } catch (error) {
     console.error("Booking error:", error);
     return NextResponse.json({ error: "Booking failed. Please try again." }, { status: 500 });

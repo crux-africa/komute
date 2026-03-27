@@ -1,31 +1,38 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-        <Link href="/" className="font-heading text-xl font-bold tracking-tight">
-          <span className="text-forest dark:text-forest-light">K</span>omute
+        <Link
+          href="/"
+          className="font-heading text-xl font-bold tracking-tight">
+          {/* <span className="text-forest dark:text-forest-light">K</span>omute */}
+          <Image
+            src="/images/komute-image/komute-logo/komute-logo-trans.png"
+            alt="Komute"
+            width={1200}
+            height={1200}
+            className="w-48 h-auto inline-block"
+          />
         </Link>
         <div className="hidden items-center gap-8 md:flex">
           <Link
             href="#how"
-            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
+            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             How it works
           </Link>
           <Link
             href="#routes"
-            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
+            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             Routes
           </Link>
           <Link
             href="#drivers"
-            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
+            className="font-body text-sm text-muted-foreground transition-colors hover:text-foreground">
             Drive
           </Link>
         </div>
@@ -44,5 +51,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

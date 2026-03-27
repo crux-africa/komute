@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TicketCheck, Clock } from "lucide-react";
 import { formatNaira, formatTime, formatDate, VEHICLE_TYPES } from "@/lib/utils";
 import Link from "next/link";
+import { toast } from "sonner";
 
 type BookingStatus =
   | "PENDING"
@@ -39,13 +41,33 @@ type BookingsResponse = {
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<BookingItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
 
+  // Handle payment callback results
   useEffect(() => {
-    fetch("/api/bookings")
-      .then((res) => res.json() as Promise<BookingsResponse>)
-      .then((data) => setBookings(data.bookings ?? []))
-      .finally(() => setLoading(false));
-  }, []);
+    const success = searchParams.get("success");
+    const error = searchParams.get("error");
+    const bookingId = searchParams.get("bookingId");
+
+    if (success === "true" && bookingId) {
+      toast.success("Booking confirmed! Your seat has been reserved.", {
+        description: "Show up at the pickup point on time.",
+      });
+    } else if (error) {
+      const errorMessages: Record<string, string> = {
+        payment_failed: "Payment was not completed. Please try again.",
+        verification_failed: "We couldn't verify your payment. Please contact support.",
+        already_booked: "You already have a booking for this ride.",
+        ride_not_found: "The ride is no longer available.",
+        missing_params: "Invalid payment response. Please try again.",
+        server_error: "Something went wrong. Please contact support with your transaction reference.",
+      };
+      const txnRef = searchParams.get("txnRef");
+      toast.error(errorMessages[error] || "Payment failed. Please try again.", {
+        description: txnRef ? `Ref: ${txnRef}` : undefined,
+      });
+    }
+  }, [searchParams]);
 
   const statusColors: Record<string, string> = {
     CONFIRMED: "bg-forest/10 text-forest dark:bg-forest-light/10 dark:text-forest-light",

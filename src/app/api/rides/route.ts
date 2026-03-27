@@ -1,40 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { createRideSchema, searchRidesSchema } from "@/lib/validations/ride";
+import { createRideSchema } from "@/lib/validations/ride";
 import { haversineDistance } from "@/lib/utils";
+import { Prisma } from "@/generated/prisma/client";
 
-// GET /api/rides — search for rides
+// GET /api/rides — search for rides (supports coords OR text)
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const params = {
-      fromLat: url.searchParams.get("fromLat"),
-      fromLng: url.searchParams.get("fromLng"),
-      toLat: url.searchParams.get("toLat"),
-      toLng: url.searchParams.get("toLng"),
-      date: url.searchParams.get("date"),
-      maxDistance: url.searchParams.get("maxDistance"),
-    };
-
-    const validation = searchRidesSchema.safeParse(params);
-    if (!validation.success) {
-      return NextResponse.json({ error: validation.error.issues[0].message }, { status: 400 });
-    }
-
-    const { fromLat, fromLng, toLat, toLng, date, maxDistance } = validation.data;
+    const fromLat = url.searchParams.get("fromLat");
+    const fromLng = url.searchParams.get("fromLng");
+    const toLat = url.searchParams.get("toLat");
+    const toLng = url.searchParams.get("toLng");
+    const fromText = url.searchParams.get("from");
+    const toText = url.searchParams.get("to");
+    const date = url.searchParams.get("date");
+    const maxDistance = Number(url.searchParams.get("maxDistance") || "10");
 
     // Get rides that are scheduled and in the future
-    const dateFilter = date ? new Date(date) : new Date();
-    const dateEnd = new Date(dateFilter);
+    const now = new Date();
+    const dateEnd = date ? new Date(date) : new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     dateEnd.setHours(23, 59, 59, 999);
 
+    // Build where clause — support text-based area search
+    const where: Prisma.RideWhereInput = {
+      status: "SCHEDULED",
+      availableSeats: { gt: 0 },
+      departureTime: { gte: now, lte: dateEnd },
+    };
+
+    if (fromText) {
+      where.originArea = { contains: fromText, mode: "insensitive" };
+    }
+    if (toText) {
+      where.destArea = { contains: toText, mode: "insensitive" };
+    }
+
     const rides = await prisma.ride.findMany({
-      where: {
-        status: "SCHEDULED",
-        availableSeats: { gt: 0 },
-        departureTime: { gte: new Date(), lte: dateEnd },
-      },
+      where,
       include: {
         driver: {
           select: {
@@ -55,22 +59,27 @@ export async function GET(req: NextRequest) {
       take: 50,
     });
 
-    // Filter by proximity using Haversine
-    const matched = rides
-      .map((ride) => {
-        const originDist = haversineDistance(fromLat, fromLng, ride.originLat, ride.originLng);
-        const destDist = haversineDistance(toLat, toLng, ride.destLat, ride.destLng);
-        return { ...ride, originDistance: Math.round(originDist * 10) / 10, destDistance: Math.round(destDist * 10) / 10 };
-      })
-      .filter((ride) => ride.originDistance <= maxDistance && ride.destDistance <= maxDistance + 1)
-      .sort((a, b) => {
-        // Score: 40% pickup distance, 30% price, 20% time, 10% rating
-        const scoreA = a.originDistance * 0.4 + (a.pricePerSeat / 100000) * 0.3;
-        const scoreB = b.originDistance * 0.4 + (b.pricePerSeat / 100000) * 0.3;
-        return scoreA - scoreB;
-      });
+    // If coordinate search, filter by Haversine proximity
+    if (fromLat && fromLng && toLat && toLng) {
+      const fLat = Number(fromLat);
+      const fLng = Number(fromLng);
+      const tLat = Number(toLat);
+      const tLng = Number(toLng);
 
-    return NextResponse.json({ rides: matched, total: matched.length });
+      const matched = rides
+        .map((ride) => {
+          const originDist = haversineDistance(fLat, fLng, ride.originLat, ride.originLng);
+          const destDist = haversineDistance(tLat, tLng, ride.destLat, ride.destLng);
+          return { ...ride, originDistance: Math.round(originDist * 10) / 10, destDistance: Math.round(destDist * 10) / 10 };
+        })
+        .filter((ride) => ride.originDistance <= maxDistance && ride.destDistance <= maxDistance)
+        .sort((a, b) => a.originDistance - b.originDistance);
+
+      return NextResponse.json({ rides: matched, total: matched.length });
+    }
+
+    // Text search — return rides as-is (already filtered by area)
+    return NextResponse.json({ rides, total: rides.length });
   } catch (error) {
     console.error("Search rides error:", error);
     return NextResponse.json({ error: "Failed to search rides" }, { status: 500 });

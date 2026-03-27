@@ -31,6 +31,7 @@ export const bookRideSchema = z.object({
   rideId: z.string().min(1),
   seats: z.coerce.number().int().min(1).max(14).default(1),
   txnRef: z.string().min(1, "Payment reference required"),
+  provider: z.enum(["interswitch", "paystack"]).default("paystack"),
 });
 
 export type CreateRideInput = z.infer<typeof createRideSchema>;

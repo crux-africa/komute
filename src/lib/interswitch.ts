@@ -261,7 +261,7 @@ export async function verifyTransaction(
   expectedAmount: number
 ): Promise<TransactionVerification> {
   try {
-    const merchantCode = process.env.NEXT_PUBLIC_ISW_MERCHANT_CODE;
+    const merchantCode = process.env.ISW_MERCHANT_CODE;
     const url = `${ISW_PAYMENT_SANDBOX}/collections/api/v1/gettransaction.json?merchantcode=${merchantCode}&transactionreference=${transactionRef}&amount=${expectedAmount}`;
 
     const response = await fetch(url, {
