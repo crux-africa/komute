@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +37,32 @@ import {
   User,
   CheckCircle2,
   AlertCircle,
+  MapPin,
+  RefreshCw,
 } from "lucide-react";
+
+interface APILGA {
+  name: string;
+  alias: string;
+  description: string;
+  busStops: { name: string; landmarks: string[] }[];
+}
+
+async function fetchLGAs(): Promise<APILGA[]> {
+  try {
+    const res = await fetch("/api/lgas", { cache: "no-store" });
+    const data = await res.json();
+    if (data.success && data.lgas) {
+      return data.lgas;
+    }
+    // If API fails, return empty - don't use fallback
+    console.warn("LGA API returned no data");
+    return [];
+  } catch (e) {
+    console.error("Failed to fetch LGAs from API:", e);
+    return [];
+  }
+}
 
 type Step = "profile" | "nin" | "vehicle" | "license" | "complete";
 
@@ -49,6 +74,19 @@ export default function OnboardingPage() {
   const [roles, setRoles] = useState<string[]>([]);
   const [ninVerified, setNinVerified] = useState(false);
   const [licenseVerified, setLicenseVerified] = useState(false);
+  const [lgas, setLgas] = useState<APILGA[]>([]);
+  const [loadingLGAs, setLoadingLGAs] = useState(true);
+  const [homeLGA, setHomeLGA] = useState<APILGA | null>(null);
+  const [homeBusStop, setHomeBusStop] = useState<string>("");
+  const [workLGA, setWorkLGA] = useState<APILGA | null>(null);
+  const [workBusStop, setWorkBusStop] = useState<string>("");
+
+  useEffect(() => {
+    fetchLGAs().then(data => {
+      setLgas(data);
+      setLoadingLGAs(false);
+    });
+  }, []);
 
   // =========================================
   // STEP 1: Profile Form
@@ -64,7 +102,12 @@ export default function OnboardingPage() {
       const res = await fetch("/api/auth/complete-onboarding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ step: "profile", ...data }),
+        body: JSON.stringify({ 
+          step: "profile", 
+          ...data,
+          homeArea: homeBusStop || data.homeArea,
+          workArea: workBusStop || data.workArea,
+        }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
@@ -319,22 +362,177 @@ export default function OnboardingPage() {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="homeArea">Home area</Label>
-                <Input
-                  id="homeArea"
-                  placeholder="e.g. Ikorodu, Ajah, Mowe"
-                  {...profileForm.register("homeArea")}
-                />
+              {/* Home LGA & Bus Stop */}
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-forest" />
+                  Home Location
+                  {loadingLGAs && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
+                </Label>
+                
+                {loadingLGAs ? (
+                  <div className="flex items-center justify-center py-8 text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    <span className="text-sm">Loading locations from OpenStreetMap...</span>
+                  </div>
+                ) : lgas.length === 0 ? (
+                  <div className="rounded-lg border border-amber/30 bg-amber/10 p-4 text-center">
+                    <p className="text-sm text-amber">Unable to load locations. Please check your connection.</p>
+                  </div>
+                ) : (
+                <div className="grid gap-3">
+                  <Select 
+                    onValueChange={(val) => {
+                      const lga = lgas.find(l => l.name === val);
+                      setHomeLGA(lga || null);
+                      setHomeBusStop("");
+                    }}
+                  >
+                    <SelectTrigger className="bg-secondary/30">
+                      <SelectValue placeholder="Select your LGA" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {lgas.map((lga) => (
+                        <SelectItem key={lga.name} value={lga.name}>
+                          {lga.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {homeLGA && homeLGA.busStops.length > 0 && (
+                    <Select onValueChange={(val) => setHomeBusStop(val)}>
+                      <SelectTrigger className="bg-secondary/30">
+                        <SelectValue placeholder="Select nearest bus stop" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {homeLGA.busStops.map((bs) => (
+                          <SelectItem key={bs.name} value={bs.name}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{bs.name}</span>
+                              {bs.landmarks.length > 0 && (
+                                <span className="text-xs text-muted-foreground">
+                                  {bs.landmarks.slice(0, 2).join(" • ")}
+                                </span>
+                              )}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  
+                  {homeLGA && homeLGA.busStops.length === 0 && (
+                    <div className="space-y-2">
+                      <div className="rounded-lg border border-amber/30 bg-amber/10 p-3">
+                        <p className="text-xs text-amber flex items-center gap-2">
+                          <AlertCircle className="h-3 w-3" />
+                          No bus stops found in {homeLGA.name} from OpenStreetMap. Please enter your nearest landmark or bus stop manually.
+                        </p>
+                      </div>
+                      <Input
+                        placeholder="e.g., Festac Gate, Satellite Town"
+                        value={homeBusStop}
+                        onChange={(e) => setHomeBusStop(e.target.value)}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                  )}
+                </div>
+                )}
+                {homeBusStop && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3 text-terra" />
+                    {homeBusStop}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="workArea">Work area</Label>
-                <Input
-                  id="workArea"
-                  placeholder="e.g. Victoria Island, Ikeja, Lekki"
-                  {...profileForm.register("workArea")}
-                />
+              {/* Work LGA & Bus Stop */}
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-amber" />
+                  Work Location
+                  {loadingLGAs && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
+                </Label>
+                
+                {loadingLGAs ? (
+                  <div className="flex items-center justify-center py-8 text-muted-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    <span className="text-sm">Loading locations from OpenStreetMap...</span>
+                  </div>
+                ) : lgas.length === 0 ? (
+                  <div className="rounded-lg border border-amber/30 bg-amber/10 p-4 text-center">
+                    <p className="text-sm text-amber">Unable to load locations. Please check your connection.</p>
+                  </div>
+                ) : (
+                <div className="grid gap-3">
+                  <Select 
+                    onValueChange={(val) => {
+                      const lga = lgas.find(l => l.name === val);
+                      setWorkLGA(lga || null);
+                      setWorkBusStop("");
+                    }}
+                    disabled={loadingLGAs}
+                  >
+                    <SelectTrigger className="bg-secondary/30">
+                      <SelectValue placeholder="Select your LGA" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {lgas.map((lga) => (
+                        <SelectItem key={lga.name} value={lga.name}>
+                          {lga.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {workLGA && workLGA.busStops.length > 0 && (
+                    <Select onValueChange={(val) => setWorkBusStop(val)}>
+                      <SelectTrigger className="bg-secondary/30">
+                        <SelectValue placeholder="Select nearest bus stop" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {workLGA.busStops.map((bs) => (
+                          <SelectItem key={bs.name} value={bs.name}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{bs.name}</span>
+                              {bs.landmarks.length > 0 && (
+                                <span className="text-xs text-muted-foreground">
+                                  {bs.landmarks.slice(0, 2).join(" • ")}
+                                </span>
+                              )}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  
+                  {workLGA && workLGA.busStops.length === 0 && (
+                    <div className="space-y-2">
+                      <div className="rounded-lg border border-amber/30 bg-amber/10 p-3">
+                        <p className="text-xs text-amber flex items-center gap-2">
+                          <AlertCircle className="h-3 w-3" />
+                          No bus stops found in {workLGA.name} from OpenStreetMap. Please enter your nearest landmark or bus stop manually.
+                        </p>
+                      </div>
+                      <Input
+                        placeholder="e.g., Tejuosho Market, Surulere"
+                        value={workBusStop}
+                        onChange={(e) => setWorkBusStop(e.target.value)}
+                        className="bg-secondary/30"
+                      />
+                    </div>
+                  )}
+                </div>
+                )}
+                {workBusStop && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3 text-terra" />
+                    {workBusStop}
+                  </p>
+                )}
               </div>
 
               {error && (

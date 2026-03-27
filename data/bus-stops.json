@@ -1,0 +1,932 @@
+{
+  "lastUpdated": "2026-03-30T18:27:12.446Z",
+  "source": "hybrid (curated + OpenStreetMap)",
+  "totalLGAs": 20,
+  "totalBusStops": 115,
+  "lgas": [
+    {
+      "name": "Eti-Osa",
+      "description": "Eti-Osa Local Government Area",
+      "busStops": [
+        {
+          "name": "Victoria Island",
+          "landmarks": [
+            "KFC",
+            "Eko Hotel",
+            "The Bridge"
+          ]
+        },
+        {
+          "name": "Lekki Phase 1",
+          "landmarks": [
+            "Lekki Conservation Centre",
+            "Funtime Park"
+          ]
+        },
+        {
+          "name": "Lekki Phase 2",
+          "landmarks": [
+            "Lekki Mall",
+            "Pan Atlantic University"
+          ]
+        },
+        {
+          "name": "Ikota",
+          "landmarks": [
+            "Ikota Shopping Complex",
+            "Nigerian Army"
+          ]
+        },
+        {
+          "name": "Ajah Market",
+          "landmarks": [
+            "Ajah Flyover",
+            "Ajah Market"
+          ]
+        },
+        {
+          "name": "Fiki Marine (VI)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4392275,
+          "lng": 3.4245956
+        },
+        {
+          "name": "Law School (VI)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4395559,
+          "lng": 3.4253303
+        },
+        {
+          "name": "Addax/Sandfill/Maroko (VI)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.43684,
+          "lng": 3.4418
+        },
+        {
+          "name": "Tarzan (Lekki)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.5151459,
+          "lng": 3.6054636
+        },
+        {
+          "name": "Badore (Lekki)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.512124,
+          "lng": 3.614953
+        }
+      ]
+    },
+    {
+      "name": "Ikeja",
+      "description": "Ikeja Local Government Area",
+      "busStops": [
+        {
+          "name": "Oba Akran",
+          "landmarks": [
+            "Ikeja City Mall",
+            "KFC Ikeja"
+          ]
+        },
+        {
+          "name": "Opbi",
+          "landmarks": [
+            "Opbi Market",
+            "Ikeja GRA"
+          ]
+        },
+        {
+          "name": "Oshodi-Berger",
+          "landmarks": [
+            "Berger Roundabout",
+            "Nigerian Breweries"
+          ]
+        },
+        {
+          "name": "Ikeja Under Bridge",
+          "landmarks": [
+            "Ikeja Police Station",
+            "Computer Village"
+          ]
+        },
+        {
+          "name": "Allen Avenue",
+          "landmarks": [
+            "Allen Roundabout",
+            "Oshodi"
+          ]
+        },
+        {
+          "name": "Onipanu",
+          "landmarks": [
+            "Onipanu Market",
+            "Ikorodu Road"
+          ]
+        },
+        {
+          "name": "Ikeja City Mall",
+          "landmarks": [],
+          "lat": 6.6154055,
+          "lng": 3.3572665
+        },
+        {
+          "name": "Maryland Bus Stop",
+          "landmarks": [],
+          "lat": 6.5750088,
+          "lng": 3.36981
+        },
+        {
+          "name": "Ikeja Along",
+          "landmarks": [],
+          "lat": 6.5986825,
+          "lng": 3.3345357
+        },
+        {
+          "name": "Ikeja",
+          "landmarks": [],
+          "lat": 6.5919092,
+          "lng": 3.3373455
+        }
+      ]
+    },
+    {
+      "name": "Ikorodu",
+      "description": "Ikorodu Local Government Area",
+      "busStops": [
+        {
+          "name": "Ikorodu Garage",
+          "landmarks": [
+            "Ikorodu Main Market",
+            "Lagos State University"
+          ]
+        },
+        {
+          "name": "Ajah",
+          "landmarks": [
+            "Ajah Roundabout",
+            "Ajah Market"
+          ]
+        },
+        {
+          "name": "Ketu",
+          "landmarks": [
+            "Ketu Market",
+            "UI Loanne"
+          ]
+        },
+        {
+          "name": "Mile 12",
+          "landmarks": [
+            "Mile 12 Market",
+            "Toluwani"
+          ]
+        },
+        {
+          "name": "Babcock",
+          "landmarks": [
+            "Babcock University",
+            "Ilorin"
+          ]
+        },
+        {
+          "name": "Owode/Apa",
+          "landmarks": [
+            "Owode Market",
+            "Apa Waterfront"
+          ]
+        },
+        {
+          "name": "Owode Garage",
+          "landmarks": [],
+          "lat": 6.695794,
+          "lng": 2.9835039
+        },
+        {
+          "name": "Ikorodu Bus Terminal",
+          "landmarks": [],
+          "lat": 6.6211305,
+          "lng": 3.5020235
+        },
+        {
+          "name": "Owode Orini",
+          "landmarks": [],
+          "lat": 6.610121,
+          "lng": 3.411132
+        },
+        {
+          "name": "Ijede",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.5632172,
+          "lng": 3.5890471
+        }
+      ]
+    },
+    {
+      "name": "Lagos Mainland",
+      "description": "Lagos Mainland Local Government Area",
+      "busStops": [
+        {
+          "name": "Ojuelegba",
+          "landmarks": [
+            "Tejuosho",
+            "Palmgroove"
+          ]
+        },
+        {
+          "name": "Strainmill",
+          "landmarks": [
+            "Strainmill Bus Stop",
+            "Onipanu"
+          ]
+        },
+        {
+          "name": "Yaba",
+          "landmarks": [
+            "Yaba Market",
+            "LUTH"
+          ]
+        },
+        {
+          "name": "Mushin",
+          "landmarks": [
+            "Mushin Market",
+            "Isolo"
+          ]
+        },
+        {
+          "name": "Yaba Market",
+          "landmarks": [
+            "Yaba Main Market",
+            "Oyingbo"
+          ]
+        },
+        {
+          "name": "Oyingbo",
+          "landmarks": [
+            "Oyingbo Market",
+            "Tejuosho"
+          ]
+        },
+        {
+          "name": "Jibowu",
+          "landmarks": [
+            "Jibowu Bridge",
+            "Yaba College"
+          ]
+        },
+        {
+          "name": "Massey",
+          "landmarks": [
+            "Massey Street",
+            "Pelewura"
+          ]
+        },
+        {
+          "name": "Ebute Metta",
+          "landmarks": [],
+          "lat": 6.5017742,
+          "lng": 3.3737104
+        }
+      ]
+    },
+    {
+      "name": "Alimosho",
+      "description": "Alimosho Local Government Area",
+      "busStops": [
+        {
+          "name": "Ikotun Roundabout",
+          "landmarks": [
+            "IKotun Market",
+            "St. Eugene Catholic Church"
+          ]
+        },
+        {
+          "name": "Idimu Junction",
+          "landmarks": [
+            "Idimu Market",
+            "Alimosho General Hospital"
+          ]
+        },
+        {
+          "name": "Egbe Junction",
+          "landmarks": [
+            "Egbe Market",
+            "Apartment 46"
+          ]
+        },
+        {
+          "name": "Abraham Adesanya",
+          "landmarks": [
+            "Abeokuta Expressway",
+            "Sango Market"
+          ]
+        },
+        {
+          "name": "Ikotun Terminal",
+          "landmarks": [],
+          "lat": 6.548011,
+          "lng": 3.2677866
+        },
+        {
+          "name": "Ikotun Bus Station",
+          "landmarks": [],
+          "lat": 6.5493778,
+          "lng": 3.2679981
+        },
+        {
+          "name": "Alimosho",
+          "landmarks": [],
+          "lat": 6.6112012,
+          "lng": 3.2958755
+        }
+      ]
+    },
+    {
+      "name": "Kosofe",
+      "description": "Kosofe Local Government Area",
+      "busStops": [
+        {
+          "name": "Ketu",
+          "landmarks": [
+            "Ketu Market",
+            "Alausa"
+          ]
+        },
+        {
+          "name": "Mile 12",
+          "landmarks": [
+            "Mile 12 Market",
+            "IKOS"
+          ]
+        },
+        {
+          "name": "Ogudin",
+          "landmarks": [
+            "Ogudin Market",
+            "Kosofe Mgbon"
+          ]
+        },
+        {
+          "name": "Kaji",
+          "landmarks": [
+            "Kaji Market",
+            "Abule-Egba"
+          ]
+        },
+        {
+          "name": "BRT Ketu",
+          "landmarks": [],
+          "lat": 6.5983761,
+          "lng": 3.3864292
+        },
+        {
+          "name": "Mile 12 Bus Stop",
+          "landmarks": [],
+          "lat": 6.6057316,
+          "lng": 3.3998072
+        },
+        {
+          "name": "Agboyi Ketu",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.5825691,
+          "lng": 3.4076019
+        }
+      ]
+    },
+    {
+      "name": "Ojo",
+      "description": "Ojo Local Government Area",
+      "busStops": [
+        {
+          "name": "Ojo Town",
+          "landmarks": [
+            "Ojo Market",
+            "Ojo Town Hall"
+          ]
+        },
+        {
+          "name": "Ijanikin",
+          "landmarks": [
+            "Ijanikin Market",
+            "Ijanikin Beach"
+          ]
+        },
+        {
+          "name": "Trade Fair",
+          "landmarks": [
+            "Trade Fair Complex",
+            "BBA"
+          ]
+        },
+        {
+          "name": "Ajangbadi",
+          "landmarks": [
+            "Ajangbadi Market",
+            "Ojo Road"
+          ]
+        },
+        {
+          "name": "Ebute Ojo/Sifax Ferry Terminal",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4529047,
+          "lng": 3.2055278
+        },
+        {
+          "name": "Irewe Ojo",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4244696,
+          "lng": 3.152976
+        },
+        {
+          "name": "Ojo Market",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4531761,
+          "lng": 3.2042457
+        }
+      ]
+    },
+    {
+      "name": "Apapa",
+      "description": "Apapa Local Government Area",
+      "busStops": [
+        {
+          "name": "Apapa Port Gate",
+          "landmarks": [
+            "Nigerian Port Authority",
+            "NPA Headquarters"
+          ]
+        },
+        {
+          "name": "Toll Gate",
+          "landmarks": [
+            "Railway Crossing",
+            "Oshodi"
+          ]
+        },
+        {
+          "name": "Liverpool",
+          "landmarks": [
+            "Liverpool Market",
+            "Nigerian Navy"
+          ]
+        },
+        {
+          "name": "Boundary (Apapa)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4504109,
+          "lng": 3.3515809
+        },
+        {
+          "name": "Apapa Flour Mill",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4475379,
+          "lng": 3.3749839
+        },
+        {
+          "name": "Allens Unit/Alex Apapa",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4345381,
+          "lng": 3.3702968
+        }
+      ]
+    },
+    {
+      "name": "Lagos Island",
+      "description": "Lagos Island Local Government Area",
+      "busStops": [
+        {
+          "name": "CMS",
+          "landmarks": [
+            "Catholic Mission Street",
+            "Idumota"
+          ]
+        },
+        {
+          "name": "Idumota",
+          "landmarks": [
+            "Idumota Market",
+            "Central Mosque"
+          ]
+        },
+        {
+          "name": "Lagos Island CBD",
+          "landmarks": [
+            "National Museum",
+            "Tafawa Balewa Square"
+          ]
+        },
+        {
+          "name": "Ereko",
+          "landmarks": [
+            "Ereko Market",
+            "Lagos Island"
+          ]
+        },
+        {
+          "name": "Olowogbowo",
+          "landmarks": [
+            "Olowogbowo Market",
+            "Bureau de Change"
+          ]
+        },
+        {
+          "name": "Marina/CMS",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4494976,
+          "lng": 3.3897778
+        }
+      ]
+    },
+    {
+      "name": "Ifako-Ijaiye",
+      "description": "Ifako-Ijaiye Local Government Area",
+      "busStops": [
+        {
+          "name": "Ogba",
+          "landmarks": [
+            "Nigerian Law School",
+            "Oke-Ira"
+          ]
+        },
+        {
+          "name": "Abule-Egba",
+          "landmarks": [
+            "Abule-Egba Market",
+            "Amuwajale"
+          ]
+        },
+        {
+          "name": "Iyana-Ipaja",
+          "landmarks": [
+            "Iyana-Ipaja Market",
+            "K人家园"
+          ]
+        },
+        {
+          "name": "Agege",
+          "landmarks": [
+            "Agege Stadium",
+            "Pen Cinema"
+          ]
+        },
+        {
+          "name": "Ogba Bus Park",
+          "landmarks": [],
+          "lat": 6.6325013,
+          "lng": 3.3417422
+        }
+      ]
+    },
+    {
+      "name": "Mushin",
+      "description": "Mushin Local Government Area",
+      "busStops": [
+        {
+          "name": "Mushin Market",
+          "landmarks": [
+            "Mushin Main Market",
+            "Mushin"
+          ]
+        },
+        {
+          "name": "Isolo",
+          "landmarks": [
+            "Isolo Industrial",
+            "Ajao Estate"
+          ]
+        },
+        {
+          "name": "Ajao Estate",
+          "landmarks": [
+            "Ajao Market",
+            "Lagos-Ibadan Expressway"
+          ]
+        },
+        {
+          "name": "Orile-Iganmu",
+          "landmarks": [
+            "Orile Market",
+            "Nigerian Railway"
+          ]
+        },
+        {
+          "name": "Ajao Estate main entrance",
+          "landmarks": [],
+          "lat": 6.5521983,
+          "lng": 3.3288226
+        }
+      ]
+    },
+    {
+      "name": "Oshodi-Isolo",
+      "description": "Oshodi-Isolo Local Government Area",
+      "busStops": [
+        {
+          "name": "Oshodi-Bojo",
+          "landmarks": [
+            "Oshodi Bus Terminal",
+            "Oshodi Market"
+          ]
+        },
+        {
+          "name": "Amuwo",
+          "landmarks": [
+            "Amuwo Odofin",
+            "Festac"
+          ]
+        },
+        {
+          "name": "Isolo",
+          "landmarks": [
+            "Isolo Junction",
+            "Ajao Estate"
+          ]
+        },
+        {
+          "name": "Kollington",
+          "landmarks": [
+            "Kollington Bus Stop",
+            "Ishashi"
+          ]
+        },
+        {
+          "name": "Oshodi",
+          "landmarks": [],
+          "lat": 6.557242,
+          "lng": 3.3513783
+        }
+      ]
+    },
+    {
+      "name": "Surulere",
+      "description": "Surulere Local Government Area",
+      "busStops": [
+        {
+          "name": "Ojuelegba",
+          "landmarks": [
+            "Ojuelegba Market",
+            "Tejuosho"
+          ]
+        },
+        {
+          "name": "Babalosa",
+          "landmarks": [
+            "Babalosa Market",
+            "Surulere"
+          ]
+        },
+        {
+          "name": "Adelabu",
+          "landmarks": [
+            "Adelabu Market",
+            "Rally"
+          ]
+        },
+        {
+          "name": "Tejuosho",
+          "landmarks": [
+            "Tejuosho Market",
+            "Ojuelegba"
+          ]
+        },
+        {
+          "name": "Coker",
+          "landmarks": [
+            "Coker Market",
+            "Orile"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ajeromi-Ifelodun",
+      "description": "Ajeromi-Ifelodun Local Government Area",
+      "busStops": [
+        {
+          "name": "Alaba",
+          "landmarks": [],
+          "lat": 6.4643778,
+          "lng": 3.3244856
+        },
+        {
+          "name": "Kumuyi Street (Ajegunle)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4484401,
+          "lng": 3.3508931
+        },
+        {
+          "name": "Mogaji (Ajegunle)",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4460592,
+          "lng": 3.3498518
+        },
+        {
+          "name": "Tolu Ajegunle",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4396574,
+          "lng": 3.3547922
+        }
+      ]
+    },
+    {
+      "name": "Amuwo-Odofin",
+      "description": "Amuwo-Odofin Local Government Area",
+      "busStops": [
+        {
+          "name": "Festac Gate",
+          "landmarks": [
+            "First Bank",
+            "47 Corporate Avenue"
+          ]
+        },
+        {
+          "name": "Trade Fair",
+          "landmarks": [
+            "BBA",
+            "Jumia Office"
+          ]
+        },
+        {
+          "name": "Berger Yard",
+          "landmarks": [
+            "Berger Paints",
+            "Nigerian Breweries"
+          ]
+        },
+        {
+          "name": "Satellite Town",
+          "landmarks": [
+            "Nigerian Navy",
+            "Baba I demo"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Badagry",
+      "description": "Badagry Local Government Area",
+      "busStops": [
+        {
+          "name": "Badagry Roundabout",
+          "landmarks": [
+            "Badagry Market",
+            "First Church"
+          ]
+        },
+        {
+          "name": "Seme Border",
+          "landmarks": [
+            "Nigeria-Benin Border",
+            "Seme Market"
+          ]
+        },
+        {
+          "name": "Topo",
+          "landmarks": [
+            "Topo Market",
+            "Badagry Expressway"
+          ]
+        },
+        {
+          "name": "Second Badagry",
+          "landmarks": [
+            "ferry_terminal"
+          ],
+          "lat": 6.4410399,
+          "lng": 3.348589
+        }
+      ]
+    },
+    {
+      "name": "Ibeju-Lekki",
+      "description": "Ibeju-Lekki Local Government Area",
+      "busStops": [
+        {
+          "name": "Ajah Junction",
+          "landmarks": [
+            "Ajah Roundabout",
+            "Ajah Market"
+          ]
+        },
+        {
+          "name": "Lekki Free Trade Zone",
+          "landmarks": [
+            "Dangote Refinery",
+            "Alaro City"
+          ]
+        },
+        {
+          "name": "Eleko Beach",
+          "landmarks": [
+            "Eleko Beach Resort",
+            "Eti-Osa"
+          ]
+        },
+        {
+          "name": "Eleko Junction",
+          "landmarks": [],
+          "lat": 6.4751252,
+          "lng": 3.8439711
+        }
+      ]
+    },
+    {
+      "name": "Shomolu",
+      "description": "Shomolu Local Government Area",
+      "busStops": [
+        {
+          "name": "Bariga",
+          "landmarks": [
+            "Bariga Market",
+            "UNILAG"
+          ]
+        },
+        {
+          "name": "Shomolu",
+          "landmarks": [
+            "Shomolu Market",
+            "Palmgroove"
+          ]
+        },
+        {
+          "name": "Fadeyi",
+          "landmarks": [
+            "Fadeyi Market",
+            "Ikorodu Road"
+          ]
+        },
+        {
+          "name": "Fadeyi Bus Stop",
+          "landmarks": [],
+          "lat": 6.5248153,
+          "lng": 3.367682
+        }
+      ]
+    },
+    {
+      "name": "Epe",
+      "description": "Epe Local Government Area",
+      "busStops": [
+        {
+          "name": "Epe T-junction",
+          "landmarks": [
+            "Epe Market",
+            "Oba Palace"
+          ]
+        },
+        {
+          "name": "Lekki-Epe Expressway",
+          "landmarks": [
+            "Lekki Free Trade Zone",
+            "Dangote Refinery"
+          ]
+        },
+        {
+          "name": "Omu Ibrahim",
+          "landmarks": [
+            "Omu Resort",
+            "Epe Marina"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Agege",
+      "description": "Agege Local Government Area",
+      "busStops": []
+    }
+  ]
+}
