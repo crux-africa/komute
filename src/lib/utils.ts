@@ -111,33 +111,64 @@ export const LAGOS_CORRIDORS = [
     name: "Ikorodu → Island",
     from: { lat: 6.6194, lng: 3.5105 },
     to: { lat: 6.4281, lng: 3.4219 },
+    pricePerSeat: 80000, // ₦800
+    estimatedDistance: 18, // km
   },
   {
     name: "Ajah → Victoria Island",
     from: { lat: 6.4698, lng: 3.5852 },
     to: { lat: 6.4281, lng: 3.4219 },
+    pricePerSeat: 50000, // ₦500
+    estimatedDistance: 8,
   },
   {
     name: "Berger → Ikeja",
     from: { lat: 6.6018, lng: 3.3515 },
     to: { lat: 6.5955, lng: 3.3421 },
+    pricePerSeat: 30000, // ₦300
+    estimatedDistance: 5,
   },
   {
     name: "Mowe/Ibafo → Ikeja",
     from: { lat: 6.81, lng: 3.44 },
     to: { lat: 6.5955, lng: 3.3421 },
+    pricePerSeat: 100000, // ₦1000
+    estimatedDistance: 25,
   },
   {
     name: "Ojo → Apapa",
     from: { lat: 6.4579, lng: 3.1818 },
     to: { lat: 6.4488, lng: 3.3597 },
+    pricePerSeat: 40000, // ₦400
+    estimatedDistance: 7,
   },
   {
     name: "Lekki → Ikeja",
     from: { lat: 6.4478, lng: 3.4723 },
     to: { lat: 6.5955, lng: 3.3421 },
+    pricePerSeat: 60000, // ₦600
+    estimatedDistance: 12,
   },
 ] as const;
+
+export function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+export function calculatePrice(distance: number): number {
+  const baseRate = 3000; // ₦30 per km base rate
+  const minPrice = 20000; // ₦200 minimum
+  const maxPrice = 150000; // ₦1500 maximum
+  const calculated = Math.round((distance * baseRate + minPrice) / 100) * 100;
+  return Math.min(Math.max(calculated, minPrice), maxPrice);
+}
 
 export const NIGERIAN_BANKS = [
   { code: "044", name: "Access Bank" },

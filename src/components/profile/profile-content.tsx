@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield } from "lucide-react";
 
-export default async function ProfilePage() {
+export default async function ProfileContent() {
   const user = await requireAuth();
   const profile = user.driverProfile;
 

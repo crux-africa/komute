@@ -12,7 +12,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import { LAGOS_CORRIDORS } from "@/lib/utils";
 import z from "zod";
 
 export default function CreateRidePage() {
@@ -26,22 +25,8 @@ export default function CreateRidePage() {
   const { register, handleSubmit, setValue, formState: { errors } } =
     useForm<CreateRideFormValues, unknown, CreateRideInput>({
       resolver: zodResolver(createRideSchema),
-      defaultValues: { totalSeats: 3, isRecurring: false },
+      defaultValues: { totalSeats: 3, isRecurring: false, pricePerSeat: 50000 },
     });
-
-
-
-  function selectCorridor(index: number) {
-    const corridors = LAGOS_CORRIDORS[index];
-    setValue("originLat", corridors.from.lat);
-    setValue("originLng", corridors.from.lng);
-    setValue("originAddress", corridors.name.split(" → ")[0]);
-    setValue("originArea", corridors.name.split(" → ")[0]);
-    setValue("destLat", corridors.to.lat);
-    setValue("destLng", corridors.to.lng);
-    setValue("destAddress", corridors.name.split(" → ")[1]);
-    setValue("destArea", corridors.name.split(" → ")[1]);
-  }
 
   async function onSubmit(data: CreateRideInput) {
     setIsLoading(true);
@@ -81,18 +66,6 @@ export default function CreateRidePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      {/* Quick route selector */}
-      <div>
-        <p className="font-body text-xs font-semibold text-muted-foreground mb-2">Quick select a corridor</p>
-        <div className="flex flex-wrap gap-2">
-          {LAGOS_CORRIDORS.map((c, i) => (
-            <button key={c.name} onClick={() => selectCorridor(i)} className="rounded-full border border-border px-3 py-1.5 font-body text-xs transition-colors hover:border-forest/30 hover:bg-forest/5 dark:hover:border-forest-light/30">
-              {c.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle className="font-heading text-xl">Offer a ride</CardTitle>
@@ -146,8 +119,8 @@ export default function CreateRidePage() {
               </div>
               <div className="space-y-2">
                 <Label className="font-body">Price per seat (₦)</Label>
-                <Input type="number" min={100} placeholder="800" onChange={(e) => setValue("pricePerSeat", Number(e.target.value) * 100)} />
-                <p className="text-[10px] text-muted-foreground">Enter in Naira</p>
+                <Input type="number" min={100} {...register("pricePerSeat", { valueAsNumber: true })} />
+                <p className="text-[10px] text-muted-foreground">Auto-filled from route. Adjust if needed.</p>
               </div>
             </div>
 

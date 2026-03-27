@@ -30,7 +30,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "My rides", href: "/driver/rides", icon: Car, roles: ["DRIVER"] },
   { label: "Create ride", href: "/driver/rides/new", icon: Plus, roles: ["DRIVER"] },
   { label: "Earnings", href: "/driver/earnings", icon: Wallet, roles: ["DRIVER"] },
-  { label: "Profile", href: "/profile", icon: User, roles: ["RIDER", "DRIVER"] },
+  { label: "Profile", href: "/rider/profile", icon: User, roles: ["RIDER"] },
+  { label: "Profile", href: "/driver/profile", icon: User, roles: ["DRIVER"] },
 ];
 
 function SidebarContent({
@@ -120,7 +121,7 @@ function SidebarContent({
 function MobileBottomNav() {
   const pathname = usePathname();
   const activeRole = pathname.startsWith("/driver") ? "DRIVER" : "RIDER";
-  const items = NAV_ITEMS.filter((i) => i.roles.includes(activeRole as "RIDER" | "DRIVER") && i.href !== "/profile").slice(0, 4);
+  const items = NAV_ITEMS.filter((i) => i.roles.includes(activeRole as "RIDER" | "DRIVER") && !i.href.includes("/profile")).slice(0, 4);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-lg md:hidden">
@@ -143,12 +144,12 @@ export default function DashboardShell({ children, user }: { children: React.Rea
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const activeRole = pathname.startsWith("/driver") ? "DRIVER" : "RIDER";
 
   const getTitle = () => {
     const map: Record<string, string> = {
-      "/rider": "Find rides", "/rider/search": "Search rides", "/rider/bookings": "My bookings", "/rider/savings": "Savings tracker",
-      "/driver": "Dashboard", "/driver/rides": "My rides", "/driver/rides/new": "Offer a ride", "/driver/earnings": "Earnings",
-      "/profile": "Profile",
+      "/rider": "Find rides", "/rider/search": "Search rides", "/rider/bookings": "My bookings", "/rider/savings": "Savings tracker", "/rider/profile": "Profile",
+      "/driver": "Dashboard", "/driver/rides": "My rides", "/driver/rides/new": "Offer a ride", "/driver/earnings": "Earnings", "/driver/profile": "Profile",
     };
     return map[pathname] || "Komute";
   };
@@ -181,7 +182,7 @@ export default function DashboardShell({ children, user }: { children: React.Rea
           </div>
           <h1 className="hidden md:block font-heading text-lg font-bold tracking-tight">{getTitle()}</h1>
           <div className="ml-auto">
-            <Link href="/profile">
+            <Link href={activeRole === "DRIVER" ? "/driver/profile" : "/rider/profile"}>
               <Avatar className="h-8 w-8 cursor-pointer border border-border">
                 <AvatarFallback className="bg-forest/10 font-body text-xs font-bold text-forest dark:bg-forest-light/10 dark:text-forest-light">
                   {user.name ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "U"}
