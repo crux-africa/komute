@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Search, Car, TicketCheck, PiggyBank, Plus,
@@ -53,7 +54,13 @@ function SidebarContent({
       <div className="flex h-16 items-center justify-between px-4">
         {!collapsed && (
           <Link href="/" className="font-heading text-lg font-bold text-[#FAFAF8]">
-            <span className="text-amber">K</span>omute
+            <Image
+              src="/images/komute-image/komute-logo/komute-logo-trans.png"
+              alt="Komute"
+              width={1200}
+              height={1200}
+              className="w-28 h-auto"
+            />
           </Link>
         )}
         <Button onClick={onToggle} className="flex h-8 w-8 items-center justify-center rounded-md text-[#FAFAF8]/60 hover:bg-forest-light/30 hover:text-[#FAFAF8] transition-colors">
@@ -163,7 +170,16 @@ export default function DashboardShell({ children, user }: { children: React.Rea
           <Button onClick={() => setMobileOpen(true)} className="flex h-9 w-9 items-center justify-center rounded-md border border-border md:hidden">
             <Menu className="h-4 w-4" />
           </Button>
-          <h1 className="font-heading text-lg font-bold tracking-tight">{getTitle()}</h1>
+          <div className="md:hidden">
+            <Image
+              src="/images/komute-image/komute-logo/komute-logo-trans.png"
+              alt="Komute"
+              width={1200}
+              height={1200}
+              className="w-28 h-auto"
+            />
+          </div>
+          <h1 className="hidden md:block font-heading text-lg font-bold tracking-tight">{getTitle()}</h1>
           <div className="ml-auto">
             <Link href="/profile">
               <Avatar className="h-8 w-8 cursor-pointer border border-border">

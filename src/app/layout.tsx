@@ -39,8 +39,8 @@ export default function RootLayout({
         inter.variable,
       )}>
       <head>
-        <Script src="https://newwebpay.qa.interswitchng.com/inline-checkout.js" async></Script>
-        <Script src="https://js.paystack.co/v1/inline.js" async ></Script>
+        <Script src="https://newwebpay.qa.interswitchng.com/inline-checkout.js" strategy="beforeInteractive" />
+        <Script src="https://js.paystack.co/v1/inline.js" strategy="beforeInteractive" />
       </head>
       <body className="min-h-full flex flex-col">
         {children}

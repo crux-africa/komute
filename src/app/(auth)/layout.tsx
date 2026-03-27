@@ -8,9 +8,13 @@ export default function AuthLayout({
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-primary">
-            Komute
-          </h1>
+          <div className="flex justify-center mb-2">
+            <img 
+              src="/images/komute-image/komute-logo/komute-logo-trans.png"
+              alt="Komute"
+              className="w-48 h-auto"
+            />
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
             Book your seat tonight. Skip the queue tomorrow.
           </p>

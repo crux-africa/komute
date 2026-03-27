@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PaymentMethodSelector } from "@/components/payments/payment-method-selector";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { formatNaira } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Props {
   rideId: string;
@@ -23,9 +24,43 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
   const [seats, setSeats] = useState(1);
   const [step, setStep] = useState<"select" | "pay" | "confirming" | "done" | "error">(alreadyBooked ? "done" : "select");
   const [error, setError] = useState("");
+  const [errorDetail, setErrorDetail] = useState("");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [checkingConflict, setCheckingConflict] = useState(false);
 
   const totalPrice = pricePerSeat * seats;
+
+  async function handleContinueToPayment() {
+    // Check for time conflicts before proceeding to payment
+    setCheckingConflict(true);
+    try {
+      const res = await fetch("/api/bookings/check-conflict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rideId }),
+      });
+      const result = await res.json();
+
+      if (result.hasConflict) {
+        // Show conflict error
+        setError("Booking Time Conflict");
+        setErrorDetail(result.message || "You have another booking at this time");
+        setStep("error");
+        toast.error("Booking Conflict", {
+          description: result.message,
+        });
+      } else {
+        // No conflict, proceed to payment
+        setStep("pay");
+      }
+    } catch (err) {
+      console.error("Error checking conflicts:", err);
+      // On error, allow user to proceed (fail-open)
+      setStep("pay");
+    } finally {
+      setCheckingConflict(false);
+    }
+  }
 
   async function handlePaymentSuccess(txnRef: string, provider: "interswitch" | "paystack") {
     setShowPaymentDialog(false);
@@ -37,7 +72,14 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
         body: JSON.stringify({ rideId, seats, txnRef, provider }),
       });
       const result = await res.json();
-      if (!res.ok) throw new Error(result.error || result.detail);
+      if (!res.ok) {
+        // Handle different error types
+        if (res.status === 409 && result.conflictingBooking) {
+          // Time conflict error - show detailed message
+          throw new Error(result.detail || "You have a conflicting booking at this time");
+        }
+        throw new Error(result.detail || result.error);
+      }
       setStep("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Booking failed after payment. Contact support.");
@@ -101,8 +143,19 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
               </div>
             </div>
 
-            <Button onClick={() => setStep("pay")} className="w-full h-12 bg-amber hover:bg-amber-dark text-ink font-semibold text-base">
-              Continue to payment — {formatNaira(totalPrice)}
+            <Button 
+              onClick={handleContinueToPayment} 
+              disabled={checkingConflict}
+              className="w-full h-12 bg-amber hover:bg-amber-dark text-ink font-semibold text-base"
+            >
+              {checkingConflict ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Checking availability...
+                </>
+              ) : (
+                <>Continue to payment — {formatNaira(totalPrice)}</>
+              )}
             </Button>
           </>
         )}
@@ -142,8 +195,33 @@ export function RideBookingClient({ rideId, pricePerSeat, availableSeats, alread
 
         {step === "error" && (
           <div className="space-y-3">
-            <div className="rounded-md bg-destructive/10 px-3 py-2 font-body text-sm text-destructive">{error}</div>
-            <Button onClick={() => { setStep("select"); setError(""); }} variant="outline" className="w-full font-body">Try again</Button>
+            <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-4 space-y-2">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-heading text-sm font-semibold text-destructive">{error}</p>
+                  {errorDetail && (
+                    <p className="font-body text-sm text-destructive/80 mt-1">{errorDetail}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => { setStep("select"); setError(""); setErrorDetail(""); }} 
+                variant="outline" 
+                className="flex-1 font-body"
+              >
+                Try different ride
+              </Button>
+              <Button 
+                onClick={() => router.push("/rider/bookings")} 
+                variant="default" 
+                className="flex-1 font-body"
+              >
+                View my bookings
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>

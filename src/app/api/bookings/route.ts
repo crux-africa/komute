@@ -3,9 +3,10 @@ import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { verifyTransaction } from "@/lib/interswitch";
 import { verifyPaystackTransaction } from "@/lib/paystack";
+import { checkBookingConflicts } from "@/lib/booking-conflicts";
 import { bookRideSchema } from "@/lib/validations/ride";
 
-// POST /api/bookings — book a seat (with payment verification)
+// POST /api/bookings — book a seat (with payment verification and conflict checking)
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser();
@@ -26,12 +27,23 @@ export async function POST(req: NextRequest) {
     if (ride.availableSeats < seats) return NextResponse.json({ error: `Only ${ride.availableSeats} seat(s) left` }, { status: 400 });
     if (ride.driverId === user.id) return NextResponse.json({ error: "You cannot book your own ride" }, { status: 400 });
 
-    // Check for existing booking
+    // Check for existing booking on this specific ride
     const existing = await prisma.booking.findUnique({
       where: { rideId_riderId: { rideId, riderId: user.id } },
     });
     if (existing && existing.status !== "CANCELLED") {
       return NextResponse.json({ error: "You already have a booking for this ride" }, { status: 409 });
+    }
+
+    // Check for time conflicts with other bookings
+    const conflictCheck = await checkBookingConflicts(user.id, rideId, ride.departureTime);
+    if (conflictCheck.hasConflict) {
+      console.log("[Booking] Time conflict detected:", conflictCheck);
+      return NextResponse.json({ 
+        error: "Booking time conflict", 
+        detail: conflictCheck.message,
+        conflictingBooking: conflictCheck.conflictingBooking,
+      }, { status: 409 });
     }
 
     const totalPrice = ride.pricePerSeat * seats;

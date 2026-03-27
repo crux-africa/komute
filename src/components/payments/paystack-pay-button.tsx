@@ -46,23 +46,20 @@ export function PaystackPayButton({
   disabled = false,
   loading = false,
 }: PaystackPayButtonProps) {
-  const [isReady, setIsReady] = useState(false);
+  const [paystackReady, setPaystackReady] = useState(!!window.PaystackPop);
 
   useEffect(() => {
-    // Check if Paystack is already loaded
-    if (window.PaystackPop) {
-      setIsReady(true);
-    } else {
-      // Wait for script to load
-      const interval = setInterval(() => {
-        if (window.PaystackPop) {
-          clearInterval(interval);
-          setIsReady(true);
-        }
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, []);
+    if (paystackReady) return;
+    
+    const interval = setInterval(() => {
+      if (window.PaystackPop) {
+        setPaystackReady(true);
+        clearInterval(interval);
+      }
+    }, 100);
+    
+    return () => clearInterval(interval);
+  }, [paystackReady]);
 
   const handlePayment = useCallback(() => {
     if (!window.PaystackPop) {
@@ -89,7 +86,7 @@ export function PaystackPayButton({
 
     console.log("[Paystack] Initiating payment:", { publicKey, amount, reference, email });
 
-    const handler = window.PaystackPop.setup({
+    const handler = window.PaystackPop!.setup({
       key: publicKey,
       email: email,
       amount: amount, // Amount in kobo
@@ -132,11 +129,11 @@ export function PaystackPayButton({
   return (
     <Button
       onClick={handlePayment}
-      disabled={disabled || loading || !isReady}
+      disabled={disabled || loading || !paystackReady}
       className="w-full h-12 bg-amber hover:bg-amber-dark text-ink font-semibold text-base"
       size="lg"
     >
-      {!isReady ? (
+      {!paystackReady ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Initializing...
