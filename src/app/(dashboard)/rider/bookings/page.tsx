@@ -1,0 +1,104 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TicketCheck, Clock } from "lucide-react";
+import { formatNaira, formatTime, formatDate, VEHICLE_TYPES } from "@/lib/utils";
+import Link from "next/link";
+
+type BookingStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "CANCELLED"
+  | "COMPLETED"
+  | "REFUNDED";
+
+type BookingItem = {
+  id: string;
+  seats: number;
+  totalPrice: number;
+  status: BookingStatus;
+  ride: {
+    id: string;
+    originAddress: string;
+    originArea?: string | null;
+    destAddress: string;
+    destArea?: string | null;
+    departureTime: string; // JSON from API
+    vehicleType: "CAR" | "SHUTTLE" | "KEKE";
+    driver?: { name?: string | null } | null;
+  };
+};
+
+type BookingsResponse = {
+  bookings?: BookingItem[];
+};
+
+export default function BookingsPage() {
+  const [bookings, setBookings] = useState<BookingItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/bookings")
+      .then((res) => res.json() as Promise<BookingsResponse>)
+      .then((data) => setBookings(data.bookings ?? []))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const statusColors: Record<string, string> = {
+    CONFIRMED: "bg-forest/10 text-forest dark:bg-forest-light/10 dark:text-forest-light",
+    COMPLETED: "bg-muted text-muted-foreground",
+    CANCELLED: "bg-destructive/10 text-destructive",
+    PENDING: "bg-amber/10 text-amber-dark dark:text-amber",
+  };
+
+  if (loading) return <div className="space-y-3">{[1, 2, 3].map(i => <Card key={i}><CardContent className="p-4"><Skeleton className="h-24" /></CardContent></Card>)}</div>;
+
+  if (bookings.length === 0) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center py-16 text-center">
+          <TicketCheck className="h-10 w-10 text-muted-foreground/30 mb-3" />
+          <p className="font-heading text-sm font-semibold">No bookings yet</p>
+          <p className="font-body text-xs text-muted-foreground mt-1">Search for rides and book your first seat</p>
+          <Link href="/rider" className="mt-4"><Badge variant="outline">Find rides</Badge></Link>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {bookings.map((b: BookingItem) => {
+        const ride = b.ride;
+        const departure = new Date(ride.departureTime);
+        const vehicle = VEHICLE_TYPES[ride.vehicleType as keyof typeof VEHICLE_TYPES];
+        return (
+          <Link key={b.id} href={`/rides/${ride.id}`}>
+            <Card className="cursor-pointer transition-all hover:shadow-sm">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <p className="font-heading text-sm font-bold">{ride.originArea || ride.originAddress} → {ride.destArea || ride.destAddress}</p>
+                    <div className="flex items-center gap-3 mt-1 font-body text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{formatTime(departure)}</span>
+                      <span>{formatDate(departure)}</span>
+                      <span>{vehicle?.emoji} {vehicle?.label}</span>
+                    </div>
+                  </div>
+                  <Badge className={statusColors[b.status] || ""}>{b.status.toLowerCase()}</Badge>
+                </div>
+                <div className="flex items-center justify-between border-t border-border/50 pt-3">
+                  <p className="font-body text-xs text-muted-foreground">{b.seats} seat(s) • Driver: {ride.driver?.name || "Unknown"}</p>
+                  <p className="font-heading text-sm font-bold text-forest dark:text-forest-light">{formatNaira(b.totalPrice)}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
