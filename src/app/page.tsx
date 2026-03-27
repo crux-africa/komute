@@ -11,6 +11,7 @@ import DriverCTASection from "@/components/home/driver-cta-section";
 import ContactSection from "@/components/home/contact-section";
 import FinalCTASection from "@/components/home/final-cta-section";
 import Footer from "@/components/home/footer";
+import ResearchInsightsSection from "@/components/home/research-insights-section";
 
 export default function Page() {
   return (
@@ -26,6 +27,7 @@ export default function Page() {
       <HowItWorks />
       <CostComparison />
       <TrustSection />
+      <ResearchInsightsSection />
       <DriverCTASection />
       <ContactSection />
       <FinalCTASection />
