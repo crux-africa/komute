@@ -49,8 +49,30 @@ export default function SearchPage() {
   const fromText = searchParams.get("from");
   const toText = searchParams.get("to");
 
+  // search for all
+  useEffect(() => {
+    async function searchAll() {
+      setLoading(true);
+      setSearched(true);
+
+      try {
+        const res = await fetch(`/api/rides`);
+        const data = await res.json();
+
+        setRides(data.rides || []);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    searchAll();
+  }, []);
+
   // Auto-search when params exist
   useEffect(() => {
+    console.log('hello world')
     if (fromLat && fromLng && toLat && toLng) {
       searchByCoords(fromLat, fromLng, toLat, toLng);
     } else if (fromText || toText) {
@@ -66,6 +88,8 @@ export default function SearchPage() {
         `/api/rides?fromLat=${fLat}&fromLng=${fLng}&toLat=${tLat}&toLng=${tLng}&maxDistance=10`
       );
       const data = await res.json();
+
+      console.log(data)
       setRides(data.rides || []);
     } catch (e) {
       console.error(e);
