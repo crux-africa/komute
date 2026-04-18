@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, CheckCircle2, MapPin } from "lucide-react";
-import { LAGOS_CORRIDORS, formatNaira } from "@/lib/utils";
+import { LAGOS_CORRIDORS } from "@/lib/utils";
 import z from "zod";
 
 export default function CreateRidePage() {
