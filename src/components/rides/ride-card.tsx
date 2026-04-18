@@ -45,7 +45,7 @@ export function RideCard({ ride }: RideCardProps) {
   const isVerified = ride.driver.ninVerified && ride.driver.driverProfile?.licenseVerified;
 
   return (
-    <Link href={`/rides/${ride.id}`}>
+    <Link href={`/rides/${ride.id}`} className="block">
       <Card className="group cursor-pointer border-border/50 transition-all hover:border-forest/30 hover:shadow-md hover:shadow-forest/5 dark:hover:border-forest-light/30">
         <CardContent className="p-4">
           {/* Top: Driver + Price */}

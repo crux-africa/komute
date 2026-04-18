@@ -3,24 +3,24 @@ import { requireDriver } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatNaira, formatDate } from "@/lib/utils";
-import { Wallet, TrendingUp, Car, Users, Calendar, ArrowUpRight, ArrowDownRight, Clock, Percent } from "lucide-react";
+import { Wallet, TrendingUp, Car, Users, Calendar, ArrowUpRight, Clock, Percent } from "lucide-react";
 
 export default async function EarningsPage() {
   const user = await requireDriver();
-  
+
   const [
     profile,
     rides,
     bookings,
-    recentTransactions
+    // recentTransactions
   ] = await Promise.all([
     prisma.driverProfile.findUnique({ where: { userId: user.id } }),
     prisma.ride.findMany({
       where: { driverId: user.id },
-      select: { 
-        id: true, 
-        status: true, 
-        originArea: true, 
+      select: {
+        id: true,
+        status: true,
+        originArea: true,
         destArea: true,
         departureTime: true,
         totalSeats: true,
@@ -32,10 +32,10 @@ export default async function EarningsPage() {
     }),
     prisma.booking.findMany({
       where: { ride: { driverId: user.id }, status: { in: ["CONFIRMED", "COMPLETED"] } },
-      select: { 
+      select: {
         id: true,
-        totalPrice: true, 
-        seats: true, 
+        totalPrice: true,
+        seats: true,
         createdAt: true,
         status: true,
         ride: { select: { originArea: true, destArea: true, departureTime: true } },
@@ -179,8 +179,8 @@ export default async function EarningsPage() {
                     <p className="font-heading font-semibold text-forest">
                       +{formatNaira(booking.totalPrice - Math.round(booking.totalPrice * 0.1))}
                     </p>
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className={`text-[10px] ${booking.status === "COMPLETED" ? "bg-terra/10 text-terra" : "bg-amber/10 text-amber"}`}
                     >
                       {booking.status}
@@ -208,16 +208,14 @@ export default async function EarningsPage() {
               {rides.map((ride) => (
                 <div key={ride.id} className="flex items-center justify-between py-3 border-b border-border/30 last:border-0">
                   <div className="flex items-center gap-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                      ride.status === "SCHEDULED" ? "bg-amber/10" :
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-full ${ride.status === "SCHEDULED" ? "bg-amber/10" :
                       ride.status === "COMPLETED" ? "bg-terra/10" :
-                      "bg-muted"
-                    }`}>
-                      <Car className={`h-5 w-5 ${
-                        ride.status === "SCHEDULED" ? "text-amber" :
+                        "bg-muted"
+                      }`}>
+                      <Car className={`h-5 w-5 ${ride.status === "SCHEDULED" ? "text-amber" :
                         ride.status === "COMPLETED" ? "text-terra" :
-                        "text-muted-foreground"
-                      }`} />
+                          "text-muted-foreground"
+                        }`} />
                     </div>
                     <div>
                       <p className="font-body text-sm font-medium">
@@ -238,13 +236,12 @@ export default async function EarningsPage() {
                     <p className="font-body text-xs text-muted-foreground">
                       {formatDate(ride.createdAt)}
                     </p>
-                    <Badge 
-                      variant="secondary" 
-                      className={`text-[10px] ${
-                        ride.status === "SCHEDULED" ? "bg-amber/10 text-amber" :
+                    <Badge
+                      variant="secondary"
+                      className={`text-[10px] ${ride.status === "SCHEDULED" ? "bg-amber/10 text-amber" :
                         ride.status === "COMPLETED" ? "bg-terra/10 text-terra" :
-                        "bg-muted"
-                      }`}
+                          "bg-muted"
+                        }`}
                     >
                       {ride.status}
                     </Badge>
