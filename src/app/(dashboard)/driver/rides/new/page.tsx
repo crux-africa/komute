@@ -20,6 +20,7 @@ export default function CreateRidePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [selectedCorridor, setSelectedCorridor] = useState<number | null>(null);
 
   type CreateRideFormValues = z.input<typeof createRideSchema>;
 
@@ -29,9 +30,10 @@ export default function CreateRidePage() {
       defaultValues: { totalSeats: 3, isRecurring: false, pricePerSeat: 20000 },
     });
 
-  const selectedPrice = watch("pricePerSeat");
+  const selectedPrice: number = Number(watch("pricePerSeat"));
 
-  function selectCorridor(corridor: typeof LAGOS_CORRIDORS[number]) {
+  function selectCorridor(corridor: typeof LAGOS_CORRIDORS[number], index: number) {
+    setSelectedCorridor(index);
     setValue("originLat", corridor.from.lat);
     setValue("originLng", corridor.from.lng);
     setValue("originAddress", corridor.name.split(" → ")[0]);
@@ -88,11 +90,14 @@ export default function CreateRidePage() {
           <p className="font-body text-xs font-semibold text-muted-foreground">Popular Routes</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {LAGOS_CORRIDORS.map((corridor) => (
+          {LAGOS_CORRIDORS.map((corridor, i) => (
             <button
               key={corridor.name}
-              onClick={() => selectCorridor(corridor)}
-              className="flex flex-col items-start p-3 rounded-lg border border-border bg-card hover:border-forest/50 hover:bg-forest/5 transition-all text-left"
+              onClick={() => selectCorridor(corridor, i)}
+              className={`flex flex-col items-start p-3 rounded-lg border transition-all text-left ${selectedCorridor === i
+                ? "border-forest bg-forest/10 ring-1 ring-forest/20 dark:border-forest-light dark:bg-forest-light/10 dark:ring-forest-light/20"
+                : "border-border bg-card hover:border-forest/50 hover:bg-forest/5"
+                }`}
             >
               <span className="font-body text-xs font-medium text-foreground truncate w-full">{corridor.name}</span>
               <span className="font-heading text-sm font-bold text-forest mt-1">{formatNaira(corridor.pricePerSeat)}</span>
@@ -157,11 +162,11 @@ export default function CreateRidePage() {
                 <Label className="font-body">Price per seat</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-body">₦</span>
-                  <Input 
-                    type="number" 
-                    min={100} 
+                  <Input
+                    type="number"
+                    min={100}
                     className="pl-7 font-heading font-semibold"
-                    {...register("pricePerSeat", { valueAsNumber: true })} 
+                    {...register("pricePerSeat", { valueAsNumber: true })}
                   />
                 </div>
                 <p className="text-[10px] text-muted-foreground">Affordable prices help fill your seats</p>
@@ -185,7 +190,11 @@ export default function CreateRidePage() {
             )}
 
             <Button type="submit" className="w-full h-12 bg-forest hover:bg-forest-light text-[#FAFAF8] font-semibold text-base" disabled={isLoading}>
-              {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Publishing...</> : <>Publish ride</>}
+              {isLoading ? (
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Publishing...</>
+              ) : (
+                <>Publish ride {selectedPrice ? `· ${formatNaira(selectedPrice)}/seat` : ""}</>
+              )}
             </Button>
           </form>
         </CardContent>

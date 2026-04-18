@@ -3,18 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import prisma from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
-import { 
-  Shield, 
-  Car, 
-  MapPin, 
-  Star, 
-  Phone, 
-  Mail, 
-  CreditCard, 
-  CheckCircle2, 
+import {
+  Shield,
+  Car,
+  MapPin,
+  Star,
+  Phone,
+  Mail,
+  CreditCard,
+  CheckCircle2,
   Clock,
-  Briefcase,
-  User
+  Briefcase
 } from "lucide-react";
 
 export default async function ProfileContent() {
@@ -65,12 +64,11 @@ export default async function ProfileContent() {
             </div>
             <div className="flex gap-2">
               {user.roles.map(r => (
-                <Badge 
-                  key={r} 
+                <Badge
+                  key={r}
                   variant="secondary"
-                  className={`font-body text-xs px-3 py-1 ${
-                    r === "DRIVER" ? "bg-amber/10 text-amber-dark" : "bg-forest/10 text-forest"
-                  }`}
+                  className={`font-body text-xs px-3 py-1 ${r === "DRIVER" ? "bg-amber/10 text-amber-dark" : "bg-forest/10 text-forest"
+                    }`}
                 >
                   {r === "DRIVER" ? "🚗 Driver" : "👤 Rider"}
                 </Badge>
@@ -113,26 +111,26 @@ export default async function ProfileContent() {
             Verification Status
           </h3>
           <div className="space-y-3">
-            <VerificationItem 
-              label="NIN Verification" 
-              verified={user.ninVerified} 
+            <VerificationItem
+              label="NIN Verification"
+              verified={user.ninVerified}
               description="National Identity Number"
             />
             {isDriver && profile && (
               <>
-                <VerificationItem 
-                  label="Driver's License" 
-                  verified={profile.licenseVerified} 
+                <VerificationItem
+                  label="Driver's License"
+                  verified={profile.licenseVerified}
                   description={profile.licenseNumber || "License on file"}
                 />
-                <VerificationItem 
-                  label="Vehicle Details" 
-                  verified={!!profile.vehiclePhotoUrl} 
+                <VerificationItem
+                  label="Vehicle Details"
+                  verified={!!profile.vehiclePhotoUrl}
                   description={`${profile.vehicleColor || ""} ${profile.vehicleMake || ""} ${profile.vehicleModel || ""}`.trim() || "Vehicle registered"}
                 />
-                <VerificationItem 
-                  label="Bank Account" 
-                  verified={profile.bankVerified} 
+                <VerificationItem
+                  label="Bank Account"
+                  verified={profile.bankVerified}
                   description={profile.bankName ? `${profile.bankName} ••••${profile.bankAccountNumber?.slice(-4)}` : "Bank account linked"}
                 />
               </>
@@ -215,9 +213,8 @@ export default async function ProfileContent() {
 
               {/* Approval Status */}
               <div className="flex items-start gap-3">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${
-                  profile.isApproved ? "bg-terra/10" : "bg-amber/10"
-                }`}>
+                <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${profile.isApproved ? "bg-terra/10" : "bg-amber/10"
+                  }`}>
                   {profile.isApproved ? (
                     <CheckCircle2 className="h-6 w-6 text-terra" />
                   ) : (
@@ -226,11 +223,10 @@ export default async function ProfileContent() {
                 </div>
                 <div className="flex-1">
                   <p className="font-body text-xs text-muted-foreground">Account Status</p>
-                  <Badge className={`mt-1 ${
-                    profile.isApproved 
-                      ? "bg-terra/10 text-terra border-terra/20" 
+                  <Badge className={`mt-1 ${profile.isApproved
+                      ? "bg-terra/10 text-terra border-terra/20"
                       : "bg-amber/10 text-amber border-amber/20"
-                  }`}>
+                    }`}>
                     {profile.isApproved ? "Approved Driver" : "Pending Approval"}
                   </Badge>
                 </div>
@@ -243,21 +239,20 @@ export default async function ProfileContent() {
   );
 }
 
-function VerificationItem({ 
-  label, 
-  verified, 
-  description 
-}: { 
-  label: string; 
-  verified: boolean; 
+function VerificationItem({
+  label,
+  verified,
+  description
+}: {
+  label: string;
+  verified: boolean;
   description: string;
 }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-border/30 last:border-0">
       <div className="flex items-center gap-3">
-        <div className={`flex h-8 w-8 items-center justify-center rounded-full ${
-          verified ? "bg-terra/10" : "bg-muted"
-        }`}>
+        <div className={`flex h-8 w-8 items-center justify-center rounded-full ${verified ? "bg-terra/10" : "bg-muted"
+          }`}>
           {verified ? (
             <CheckCircle2 className="h-4 w-4 text-terra" />
           ) : (
@@ -269,8 +264,8 @@ function VerificationItem({
           <p className="font-body text-xs text-muted-foreground">{description}</p>
         </div>
       </div>
-      <Badge 
-        variant="secondary" 
+      <Badge
+        variant="secondary"
         className={`text-[10px] ${verified ? "bg-terra/10 text-terra" : "bg-muted text-muted-foreground"}`}
       >
         {verified ? "Verified" : "Pending"}

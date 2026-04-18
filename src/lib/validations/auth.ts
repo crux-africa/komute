@@ -21,6 +21,7 @@ export const sendOtpSchema = z.object({
 
 export const verifyOtpSchema = z.object({
   phone: z.string().min(11),
+  email: z.email("Enter a valid email").optional(),
   code: z
     .string()
     .length(6, "OTP must be 6 digits")

@@ -15,9 +15,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { phone, code } = validation.data;
+    const { phone, code, email } = validation.data;
 
-    // Find the most recent valid OTP for this phone
     const otp = await prisma.otp.findFirst({
       where: {
         phone,
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check max attempts
     if (otp.attempts >= otp.maxAttempts) {
       return NextResponse.json(
         { error: "Too many failed attempts. Request a new OTP." },
@@ -43,24 +41,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Mark OTP as used
     await prisma.otp.update({
       where: { id: otp.id },
       data: { isUsed: true },
     });
 
-    // Find or create user
     let user = await prisma.user.findUnique({
       where: { phone },
     });
 
     if (!user) {
       user = await prisma.user.create({
-        data: { phone },
+        data: { phone, email: email || undefined },
+      });
+    } else if (email && !user.email) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { email },
       });
     }
 
-    // Create session (sets JWT cookie)
     await createSession(user.id);
 
 
