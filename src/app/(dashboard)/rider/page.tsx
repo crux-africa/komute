@@ -20,15 +20,14 @@ export default function RiderDashboard() {
   const [rides, setRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load tomorrow's rides for popular corridors
   useEffect(() => {
-    async function loadRides() {
+    async function searchAll() {
+      setLoading(true);
+
       try {
-        const corridor = LAGOS_CORRIDORS[0]; // Ikorodu → Island
-        const res = await fetch(
-          `/api/rides?fromLat=${corridor.from.lat}&fromLng=${corridor.from.lng}&toLat=${corridor.to.lat}&toLng=${corridor.to.lng}&maxDistance=5`
-        );
+        const res = await fetch(`/api/rides`);
         const data = await res.json();
+
         setRides(data.rides || []);
       } catch (e) {
         console.error(e);
@@ -36,7 +35,8 @@ export default function RiderDashboard() {
         setLoading(false);
       }
     }
-    loadRides();
+
+    searchAll();
   }, []);
 
   function handleSearch(e: React.FormEvent) {
@@ -128,7 +128,7 @@ export default function RiderDashboard() {
           </div>
         ) : rides.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {rides.slice(0, 5).map((ride) => (
+            {rides.slice(0, 3).map((ride) => (
               <RideCard key={ride.id} ride={ride} />
             ))}
           </div>
