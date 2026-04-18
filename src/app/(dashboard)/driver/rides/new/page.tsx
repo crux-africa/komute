@@ -27,7 +27,7 @@ export default function CreateRidePage() {
   const { register, handleSubmit, setValue, watch, formState: { errors } } =
     useForm<CreateRideFormValues, unknown, CreateRideInput>({
       resolver: zodResolver(createRideSchema),
-      defaultValues: { totalSeats: 3, isRecurring: false, pricePerSeat: 20000 },
+      defaultValues: { totalSeats: 3, isRecurring: false },
     });
 
   const selectedPrice: number = Number(watch("pricePerSeat"));
@@ -42,7 +42,7 @@ export default function CreateRidePage() {
     setValue("destLng", corridor.to.lng);
     setValue("destAddress", corridor.name.split(" → ")[1]);
     setValue("destArea", corridor.name.split(" → ")[1]);
-    setValue("pricePerSeat", corridor.pricePerSeat);
+    // setValue("pricePerSeat", corridor.pricePerSeat);
   }
 
   async function onSubmit(data: CreateRideInput) {
@@ -52,7 +52,10 @@ export default function CreateRidePage() {
       const res = await fetch("/api/rides", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          pricePerSeat: data.pricePerSeat * 100,
+        }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
@@ -100,8 +103,7 @@ export default function CreateRidePage() {
                 }`}
             >
               <span className="font-body text-xs font-medium text-foreground truncate w-full">{corridor.name}</span>
-              <span className="font-heading text-sm font-bold text-forest mt-1">{formatNaira(corridor.pricePerSeat)}</span>
-              <span className="font-body text-[10px] text-muted-foreground">{corridor.estimatedDistance}km</span>
+              <span className="font-body text-[10px] text-muted-foreground mt-1">{corridor.estimatedDistance}km</span>
             </button>
           ))}
         </div>
@@ -193,7 +195,7 @@ export default function CreateRidePage() {
               {isLoading ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Publishing...</>
               ) : (
-                <>Publish ride {selectedPrice ? `· ${formatNaira(selectedPrice)}/seat` : ""}</>
+                <>Publish ride {selectedPrice ? `· ₦${selectedPrice.toLocaleString()}/seat` : ""}</>
               )}
             </Button>
           </form>

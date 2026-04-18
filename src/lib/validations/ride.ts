@@ -9,9 +9,9 @@ export const createRideSchema = z.object({
   destLng: z.number().min(-180).max(180),
   destAddress: z.string().min(3, "Enter destination address"),
   destArea: z.string().optional(),
-  departureTime: z.string().datetime({ message: "Select departure time" }),
+  departureTime: z.string().min(1, "Select departure time"),
   totalSeats: z.coerce.number().int().min(1, "At least 1 seat").max(14, "Max 14 seats"),
-  pricePerSeat: z.coerce.number().int().min(10000, "Minimum ₦100 per seat"), // in kobo
+  pricePerSeat: z.coerce.number().int().min(100, "Minimum ₦100 per seat"),
   vehicleType: z.enum(["CAR", "SHUTTLE", "KEKE"]),
   isRecurring: z.boolean().default(false),
   recurringDays: z.string().optional(),
